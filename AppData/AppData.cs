@@ -90,7 +90,7 @@ public partial class AppData : AppDataAbstractBase<string, string>
         // }
 
         string vr = Path.Combine(f, af.ToString());
-        FS.WithEndSlash(ref vr);
+        FSND.WithEndSlash(ref vr);
         return vr;
     }
 
@@ -101,7 +101,7 @@ public partial class AppData : AppDataAbstractBase<string, string>
             return false;
         }
 
-        return FS.ExistsDirectory(rootFolder);
+        return Directory.Exists(rootFolder);
     }
 
 
@@ -144,16 +144,16 @@ void
 
     public string GetRootFolderForApp(string rootFolderFromCreatedAppData, string app)
     {
-        return Path.Combine(FS.GetDirectoryName(rootFolderFromCreatedAppData), app);
+        return Path.Combine(Path.GetDirectoryName(rootFolderFromCreatedAppData), app);
     }
 
     public override string GetRootFolder()
     {
         rootFolder = GetSunamoFolder();
 
-        //pa ? SH.RemoveAfterFirst(ThisApp.Name, AllChars.dot) :
+        //pa ? SHParts.RemoveAfterFirst(ThisApp.Name, AllChars.dot) :
         RootFolder = Path.Combine(rootFolder, ThisApp.Name);
-        RootFolderPa = Path.Combine(Path.GetDirectoryName(rootFolder), SH.RemoveAfterFirstChar(ThisApp.Name, AllChars.dot));
+        RootFolderPa = Path.Combine(Path.GetDirectoryName(rootFolder), SHParts.RemoveAfterFirst(ThisApp.Name, AllStrings.dot));
         Directory.CreateDirectory(RootFolder);
         Directory.CreateDirectory(RootFolderPa);
         return RootFolder;

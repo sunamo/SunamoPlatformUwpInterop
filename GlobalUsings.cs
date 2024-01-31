@@ -14,7 +14,6 @@ global using SunamoValues.Values;
 global using SunamoI18N;
 global using SunamoThisApp;
 global using SunamoPlatformUwpInterop.PlatformUwpInterop;
-global using SunamoPlatformUwpInterop._sunamo;
 global using SunamoPlatformUwpInterop.Args;
 global using SunamoPlatformUwpInterop.Interfaces;
 global using SunamoUnderscore;

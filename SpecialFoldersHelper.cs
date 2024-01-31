@@ -8,6 +8,6 @@ public partial class SpecialFoldersHelper //: SpecialFoldersHelperSE
     /// </summary>
     public static string ApplicationData()
     {
-        return FS.GetDirectoryName(AppDataRoaming());
+        return Path.GetDirectoryName(AppDataRoaming());
     }
 }

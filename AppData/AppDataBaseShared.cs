@@ -144,10 +144,7 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
         _fileFolderWithAppsFiles = Path.Combine(slozka, folderWithAppsFiles);
 
 
-        if (FS.CreateUpfoldersPsysicallyUnlessThere != null)
-        {
-            FS.CreateUpfoldersPsysicallyUnlessThere(_fileFolderWithAppsFiles);
-        }
+        FSND.CreateUpfoldersPsysicallyUnlessThere(_fileFolderWithAppsFiles);
 
 
 
@@ -260,9 +257,9 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
 
         foreach (AppFolders item in Enum.GetValues(typeof(AppFolders)))
         {
-            if (FS.CreateFoldersPsysicallyUnlessThere != null)
+            if (FSND.CreateFoldersPsysicallyUnlessThere != null)
             {
-                FS.CreateFoldersPsysicallyUnlessThere(GetFolder(item).ToString());
+                FSND.CreateFoldersPsysicallyUnlessThere(GetFolder(item).ToString());
             }
 
             Directory.CreateDirectory(AbstractNon.GetFolder(item).ToString());
@@ -312,7 +309,7 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
         {
             var path = GetPathForSettingsFile(item);
             var text = TFSE.ReadAllTextSync(path);
-            var isBool = BTS.IsBool(text);
+            bool.TryParse(text, out var isBool);
 
             if (!isBool)
             {

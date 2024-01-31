@@ -9,7 +9,7 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile>
 
     public T ReadFileOfSettingsWorker<T>(IDictionary<string, T> loadedSettingsOther, string key)
     {
-        ThrowEx.IsWindowsPathFormat(key, FS.IsWindowsPathFormat);
+        //ThrowEx.IsWindowsPathFormat(key, FS.IsWindowsPathFormat);
 
         if (!loadedSettingsOther.ContainsKey(key))
         {
