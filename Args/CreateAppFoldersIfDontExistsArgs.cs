@@ -5,6 +5,8 @@ namespace SunamoPlatformUwpInterop.Args;
 /// </summary>
 public class CreateAppFoldersIfDontExistsArgs
 {
+    public string AppName = "";
+
     /// <summary>
     /// override
     /// </summary>

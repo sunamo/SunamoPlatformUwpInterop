@@ -1,7 +1,9 @@
+namespace SunamoPlatformUwpInterop._sunamo;
+
 //namespace SunamoPlatformUwpInterop._sunamo;
 
-//public class SH
+//internal class SH
 //{
-//    //public static Func<string, char, string> RemoveAfterFirstChar;
+//    //internal static Func<string, char, string> RemoveAfterFirstChar;
 
 //}

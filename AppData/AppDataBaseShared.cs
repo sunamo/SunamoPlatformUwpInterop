@@ -1,4 +1,7 @@
+
 namespace SunamoPlatformUwpInterop.AppData;
+using SunamoPlatformUwpInterop._sunamo;
+
 
 
 
@@ -99,7 +102,7 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
             bool isNull = AbstractNon.IsRootFolderNull();
             if (isNull)
             {
-                ThrowEx.Custom("Slo\u017Eka ke soubor\u016Fm aplikace nebyla zad\u00E1na " + sess.i18n(XlfKeys.LookDirectIntoIsRootFolderNull) + ".");
+                throw new Exception("Slo\u017Eka ke soubor\u016Fm aplikace nebyla zad\u00E1na LookDirectIntoIsRootFolderNull.");
             }
 
             return rootFolder;
@@ -121,7 +124,7 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
             bool isNull = AbstractNon.IsRootFolderNull();
             if (isNull)
             {
-                ThrowEx.Custom("Slo\u017Eka ke soubor\u016Fm aplikace nebyla zad\u00E1na " + sess.i18n(XlfKeys.LookDirectIntoIsRootFolderNull) + ".");
+                throw new Exception("Slo\u017Eka ke soubor\u016Fm aplikace nebyla zad\u00E1na. LookDirectIntoIsRootFolderNull");
             }
 
             return rootFolderPa;
@@ -179,7 +182,7 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
     //        //           TF.CreateEmptyFileWhenDoesntExists(path);
     //        //           return
 
-    //        //TF.ReadAllText(path);
+    //        //File.ReadAllTextAsync(path);
     //    }
 
     /// <summary>
@@ -202,7 +205,7 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
         */
         //var GetFolderWithAppsFilesOrDefault = (s) =>
         //{
-        //    var content = TF.ReadAllTextSync(s);
+        //    var content = File.ReadAllTextAsync(s);
         //    if (content == string.Empty)
         //    {
         //        return RootFolderCommon(false);
@@ -215,9 +218,9 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
 
 
 
-        if (string.IsNullOrEmpty(ThisAppSE.Name))
+        if (string.IsNullOrEmpty(a.AppName))
         {
-            ThrowEx.Custom("Nen\u00ED vypln\u011Bno n\u00E1zev aplikace.");
+            throw new Exception("Nen\u00ED vypln\u011Bno n\u00E1zev aplikace.");
         }
 
         #region Prvně musím sunamoFolder, z ní jsem potom dále schopen odvodit root folder
@@ -240,7 +243,7 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
         if (this is AppDataAbstractBase<StorageFolder, StorageFile>)
         {
             RootFolder =
-            ((AppDataAbstractBase<StorageFolder, StorageFile>)this).GetRootFolder();
+            ((AppDataAbstractBase<StorageFolder, StorageFile>)this).GetRootFolder(a.AppName);
         }
         else if (this is AppDataAppsAbstractBase<StorageFolder, StorageFile>)
         {
@@ -253,14 +256,13 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
 
         */
 
-        RootFolder = AbstractNon.GetRootFolder();
+        RootFolder = AbstractNon.GetRootFolder(a.AppName);
 
         foreach (AppFolders item in Enum.GetValues(typeof(AppFolders)))
         {
-            if (FSND.CreateFoldersPsysicallyUnlessThere != null)
-            {
-                FSND.CreateFoldersPsysicallyUnlessThere(GetFolder(item).ToString());
-            }
+
+            FSND.CreateFoldersPsysicallyUnlessThere(GetFolder(item).ToString());
+
 
             Directory.CreateDirectory(AbstractNon.GetFolder(item).ToString());
         }
@@ -313,7 +315,7 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
 
             if (!isBool)
             {
-                ThisApp.Warning($"In ${path} was not boolean value, was written default false");
+                //ThisApp.Warning($"In ${path} was not boolean value, was written default false");
                 TFSE.WriteAllTextSync(path, bool.FalseString);
                 text = bool.FalseString;
             }

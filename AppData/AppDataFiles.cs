@@ -24,7 +24,7 @@ public partial class AppData
     {
         if (!loadedCommonSettings.ContainsKey(key))
         {
-            ThrowEx.Custom(key + " was not added into dependencies");
+            throw new Exception(key + " was not added into dependencies");
         }
 
         return loadedCommonSettings[key];

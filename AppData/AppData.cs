@@ -1,4 +1,7 @@
+using SunamoPlatformUwpInterop._sunamo;
+
 namespace SunamoPlatformUwpInterop.AppData;
+
 
 
 public partial class AppData : AppDataAbstractBase<string, string>
@@ -36,7 +39,7 @@ public partial class AppData : AppDataAbstractBase<string, string>
         }
         if (inFolderCommon)
         {
-            return Path.Combine(sunamo2, XlfKeys.Common);
+            return Path.Combine(sunamo2, "Common");
         }
 
         return sunamo2;
@@ -90,7 +93,7 @@ public partial class AppData : AppDataAbstractBase<string, string>
         // }
 
         string vr = Path.Combine(f, af.ToString());
-        FSND.WithEndSlash(ref vr);
+        vr = vr.TrimEnd('\\') + "\\";
         return vr;
     }
 
@@ -147,13 +150,13 @@ void
         return Path.Combine(Path.GetDirectoryName(rootFolderFromCreatedAppData), app);
     }
 
-    public override string GetRootFolder()
+    public override string GetRootFolder(string ThisAppName)
     {
         rootFolder = GetSunamoFolder();
 
         //pa ? SHParts.RemoveAfterFirst(ThisApp.Name, AllChars.dot) :
-        RootFolder = Path.Combine(rootFolder, ThisApp.Name);
-        RootFolderPa = Path.Combine(Path.GetDirectoryName(rootFolder), SHParts.RemoveAfterFirst(ThisApp.Name, AllStrings.dot));
+        RootFolder = Path.Combine(rootFolder, ThisAppName);
+        RootFolderPa = Path.Combine(Path.GetDirectoryName(rootFolder), SHParts.RemoveAfterFirst(ThisAppName, AllStrings.dot));
         Directory.CreateDirectory(RootFolder);
         Directory.CreateDirectory(RootFolderPa);
         return RootFolder;

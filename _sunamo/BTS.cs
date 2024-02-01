@@ -1,7 +1,9 @@
+namespace SunamoPlatformUwpInterop._sunamo;
+
 //namespace SunamoPlatformUwpInterop._sunamo;
 
-//public class BTS
+//internal class BTS
 //{
-//    public static Func<string, bool> IsBool;
+//    internal static Func<string, bool> IsBool;
 
 //}

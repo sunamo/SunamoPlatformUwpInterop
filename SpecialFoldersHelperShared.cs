@@ -29,7 +29,7 @@ public partial class SpecialFoldersHelper
         //    var n = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
         //    // Vracelo mi to empty string  s Environment.GetFolderPath
         //    //vr = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-        //    vr = @"C:\Users\"+ FS.GetFileName(n) + @"\AppData\Roaming";
+        //    vr = @"C:\Users\"+ Path.GetFileName(n) + @"\AppData\Roaming";
         //}
 
         return vr;

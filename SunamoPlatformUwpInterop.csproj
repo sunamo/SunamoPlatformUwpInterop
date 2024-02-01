@@ -3,16 +3,13 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>24.1.24.1</Version>
+    <Version>24.2.1.2</Version>
     <Description>One of base foundation for sunamo's app platform - second is SunamoThisApp</Description>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="SunamoBts" Version="24.1.24.1" />
-    <PackageReference Include="SunamoFileSystemNoDeps" Version="24.1.23.3" />
-    <PackageReference Include="SunamoI18N" Version="24.1.14.1" />
-    <PackageReference Include="SunamoStringParts" Version="24.1.23.6" />
-    <PackageReference Include="SunamoThisApp" Version="24.1.14.1" />
-    <PackageReference Include="SunamoUnderscore" Version="24.1.14.1" />
+    <PackageReference Include="SunamoBts" Version="24.2.1.1" />
+    <PackageReference Include="SunamoString" Version="24.2.1.1" />
+    <PackageReference Include="SunamoUnderscore" Version="24.2.1.1" />
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>$(DefineConstants);ASYNC</DefineConstants>

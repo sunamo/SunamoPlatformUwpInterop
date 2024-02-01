@@ -13,7 +13,7 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile>
 
         if (!loadedSettingsOther.ContainsKey(key))
         {
-            ThrowEx.Custom($"{key} was not found in dictionary, probably was not specified as deps in calling CreateAppFoldersIfDontExists");
+            throw new Exception($"{key} was not found in dictionary, probably was not specified as deps in calling CreateAppFoldersIfDontExists");
         }
 
         return loadedSettingsOther[key];

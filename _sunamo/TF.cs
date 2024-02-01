@@ -1,6 +1,8 @@
+namespace SunamoPlatformUwpInterop._sunamo;
+
 //namespace SunamoPlatformUwpInterop._sunamo;
 
-//public class TF
+//internal class TF
 //{
-//    //public static Func<string, string, string> AppendAllText;
+//    //internal static Func<string, string, string> AppendAllText;
 //}

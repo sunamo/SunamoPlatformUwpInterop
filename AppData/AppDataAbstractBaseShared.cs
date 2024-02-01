@@ -9,7 +9,7 @@ namespace SunamoPlatformUwpInterop.AppData;
 /// <typeparam name="StorageFile"></typeparam>
 public abstract partial class AppDataAbstractBase<StorageFolder, StorageFile> : AppDataBase<StorageFolder, StorageFile>
 {
-    public abstract StorageFolder GetRootFolder();
+    public abstract StorageFolder GetRootFolder(string ThisAppName);
 
     /// <summary>
     /// If file A1 dont exists, then create him with empty content and G SE. When optained file/folder doesnt exists, return it anyway
