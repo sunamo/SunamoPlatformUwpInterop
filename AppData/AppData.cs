@@ -215,7 +215,8 @@ void
     public override void SetCommonSettings(string key, string value)
     {
         var file = GetFileCommonSettings(key);
-        TFSE.WriteAllBytes(file, _.RijndaelBytesEncrypt(Encoding.UTF8.GetBytes(value).ToList()));
+
+        TFSE.WriteAllBytes(file, RijndaelBytesEncrypt(Encoding.UTF8.GetBytes(value).ToList()));
     }
 
 

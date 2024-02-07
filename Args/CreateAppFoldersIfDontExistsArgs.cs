@@ -7,6 +7,7 @@ public class CreateAppFoldersIfDontExistsArgs
 {
     public string AppName = "";
 
+
     /// <summary>
     /// override
     /// </summary>
@@ -19,4 +20,7 @@ public class CreateAppFoldersIfDontExistsArgs
 
     public List<string> keysSettingsBool = new List<string>();
     public List<string> keysSettingsOther = new List<string>();
+
+    public Func<List<byte>, List<byte>> RijndaelBytesDecrypt;
+    public Func<List<byte>, List<byte>> RijndaelBytesEncrypt;
 }

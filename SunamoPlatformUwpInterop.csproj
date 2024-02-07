@@ -3,18 +3,17 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>24.2.1.2</Version>
+    <Version>24.2.6.2</Version>
     <Description>One of base foundation for sunamo's app platform - second is SunamoThisApp</Description>
   </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="SunamoBts" Version="24.2.1.1" />
-    <PackageReference Include="SunamoString" Version="24.2.1.1" />
-    <PackageReference Include="SunamoUnderscore" Version="24.2.1.1" />
-  </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>$(DefineConstants);ASYNC</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DefineConstants>$(DefineConstants);ASYNC</DefineConstants>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="SunamoEnums" Version="24.2.6.2" />
+    <PackageReference Include="SunamoExceptions" Version="24.2.6.3" />
+  </ItemGroup>
 </Project>

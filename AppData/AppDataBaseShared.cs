@@ -185,6 +185,8 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
     //        //File.ReadAllTextAsync(path);
     //    }
 
+    public static Func<List<byte>, List<byte>> RijndaelBytesEncrypt;
+
     /// <summary>
     /// if is crypter, a1 start with !
     /// </summary>
@@ -192,6 +194,8 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
     /// <param name=""></param>
     public void CreateAppFoldersIfDontExists(CreateAppFoldersIfDontExistsArgs a, string basePath = null)
     {
+        RijndaelBytesEncrypt = a.RijndaelBytesEncrypt;
+
         if (init)
         {
             ThrowEx.WasAlreadyInitialized();
@@ -280,7 +284,7 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
             if (key.StartsWith("!"))
             {
                 var b = TFSE.ReadAllBytesSync(file);
-                var b2 = _.RijndaelBytesDecrypt(b);
+                var b2 = a.RijndaelBytesDecrypt(b);
                 var b3 = b2.ToArray();
                 var vr = Encoding.UTF8.GetString(b3);
                 vr = vr.Replace("\0", "");

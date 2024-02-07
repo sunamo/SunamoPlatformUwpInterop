@@ -9,7 +9,6 @@ global using SunamoValues;
 global using System.IO;
 global using System.Threading.Tasks;
 global using SunamoExceptions;
-global using SunamoUnderscore;
 global using SunamoPlatformUwpInterop.AppData;
 global using SunamoPlatformUwpInterop.PlatformUwpInterop;
 global using SunamoPlatformUwpInterop.Args;
