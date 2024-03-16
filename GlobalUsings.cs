@@ -11,5 +11,4 @@ global using System.Threading.Tasks;
 global using SunamoExceptions;
 global using SunamoPlatformUwpInterop.AppData;
 global using SunamoPlatformUwpInterop.PlatformUwpInterop;
-global using SunamoPlatformUwpInterop.Args;
 global using SunamoPlatformUwpInterop.Interfaces;

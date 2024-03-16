@@ -1,9 +1,7 @@
 
 namespace SunamoPlatformUwpInterop.AppData;
 using SunamoPlatformUwpInterop._sunamo;
-
-
-
+using SunamoPlatformUwpInterop.Args;
 
 public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<StorageFolder, StorageFile>
 {
@@ -192,7 +190,7 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
     /// </summary>
     /// <param name="keysCommonSettings"></param>
     /// <param name=""></param>
-    public void CreateAppFoldersIfDontExists(CreateAppFoldersIfDontExistsArgs a, string basePath = null)
+    public void CreateAppFoldersIfDontExists(CreateAppFoldersIfDontExistsArgs a)
     {
         RijndaelBytesEncrypt = a.RijndaelBytesEncrypt;
 
