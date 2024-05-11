@@ -1,4 +1,4 @@
-namespace SunamoPlatformUwpInterop.PlatformUwpInterop;
+namespace SunamoPlatformUwpInterop;
 
 public class AbstractCatalogBase<StorageFolder, StorageFile>
 {

@@ -1,4 +1,4 @@
-namespace SunamoPlatformUwpInterop.PlatformUwpInterop;
+namespace SunamoPlatformUwpInterop;
 
 public class FSAbstract<StorageFolder, StorageFile>
 {

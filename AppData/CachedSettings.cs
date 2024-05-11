@@ -1,4 +1,4 @@
-namespace SunamoPlatformUwpInterop.AppData;
+namespace SunamoPlatformUwpInterop;
 
 public static class CachedSettings
 {

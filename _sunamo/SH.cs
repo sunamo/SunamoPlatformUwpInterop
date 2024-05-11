@@ -1,4 +1,4 @@
-namespace SunamoPlatformUwpInterop._sunamo;
+namespace SunamoPlatformUwpInterop;
 
 //namespace SunamoPlatformUwpInterop._sunamo;
 

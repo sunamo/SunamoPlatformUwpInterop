@@ -1,5 +1,5 @@
 
-namespace SunamoPlatformUwpInterop.AppData;
+namespace SunamoPlatformUwpInterop;
 using SunamoPlatformUwpInterop._sunamo;
 using SunamoPlatformUwpInterop.Args;
 

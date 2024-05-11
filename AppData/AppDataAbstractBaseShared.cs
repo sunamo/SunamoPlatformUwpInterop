@@ -1,4 +1,4 @@
-namespace SunamoPlatformUwpInterop.AppData;
+namespace SunamoPlatformUwpInterop;
 
 /// <summary>
 /// Another methods which is adecvate only in desktop apps

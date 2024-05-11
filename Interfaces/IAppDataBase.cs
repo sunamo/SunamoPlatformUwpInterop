@@ -1,4 +1,4 @@
-namespace SunamoPlatformUwpInterop.Interfaces;
+namespace SunamoPlatformUwpInterop;
 
 public interface IAppDataBase<StorageFolder, StorageFile>
 {

@@ -1,6 +1,6 @@
 using SunamoPlatformUwpInterop._sunamo;
 
-namespace SunamoPlatformUwpInterop.AppData;
+namespace SunamoPlatformUwpInterop;
 
 
 
