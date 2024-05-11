@@ -13,6 +13,22 @@
     <DefineConstants>$(DefineConstants);ASYNC;SunamoPlatformUwpInterop</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\SunamoExceptions\OnlyInSE\Exc.cs" Link="_linked\SunamoExceptions\OnlyInSE\Exc.cs" />
+    <Compile Include="..\SunamoData\Data\StorageFile.cs" Link="_linked\SunamoData\Data\StorageFile.cs" />
+    <Compile Include="..\SunamoEnums\Enums\AppFolders.cs" Link="_linked\SunamoEnums\Enums\AppFolders.cs" />
+    <Compile Include="..\SunamoValues\Consts.cs" Link="_linked\SunamoValues\Consts.cs" />
+    <Compile Include="..\SunamoValues\AllChars.cs" Link="_linked\SunamoValues\AllChars.cs" />
+    <Compile Include="..\SunamoValues\AllStrings.cs" Link="_linked\SunamoValues\AllStrings.cs" />
+    <Compile Include="..\SunamoExceptions\OnlyInSE\ThrowEx.cs" Link="_linked\SunamoExceptions\OnlyInSE\ThrowEx.cs" />
+    <Compile Include="..\SunamoData\Data\StorageFolder.cs" Link="_linked\SunamoData\Data\StorageFolder.cs" />
+    <Compile Include="..\SunamoArgs\CreateAppFoldersIfDontExistsArgs.cs" Link="_linked\SunamoArgs\CreateAppFoldersIfDontExistsArgs.cs" />
+    <Compile Include="..\SunamoEnums\Enums\CachedSettingsKeys.cs" Link="_linked\SunamoEnums\Enums\CachedSettingsKeys.cs" />
+    <Compile Include="..\SunamoExceptions\Delegates\ExistsDirectory.cs" Link="_linked\SunamoExceptions\Delegates\ExistsDirectory.cs" />
+    <Compile Include="..\SunamoExceptions\OnlyInSE\Exceptions.cs" Link="_linked\SunamoExceptions\OnlyInSE\Exceptions.cs" />
+    <Compile Include="..\SunamoExceptions\OnlyInSE\TranslateAble.cs" Link="_linked\SunamoExceptions\OnlyInSE\TranslateAble.cs" />
+    <Compile Include="..\SunamoExceptions\_AddedToAllCsproj\SHSunamoExceptions.cs" Link="_linked\SunamoExceptions\_AddedToAllCsproj\SHSunamoExceptions.cs" />
+    <Compile Include="..\SunamoExceptions\_AddedToAllCsproj\CASunamoExceptions.cs" Link="_linked\SunamoExceptions\_AddedToAllCsproj\CASunamoExceptions.cs" />
+    <Compile Include="..\SunamoExceptions\OnlyInSE\Types.cs" Link="_linked\SunamoExceptions\OnlyInSE\Types.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Args\" />

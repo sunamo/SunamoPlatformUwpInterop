@@ -12,3 +12,6 @@ global using SunamoExceptions;
 global using SunamoPlatformUwpInterop.AppData;
 global using SunamoPlatformUwpInterop.PlatformUwpInterop;
 global using SunamoPlatformUwpInterop.Interfaces;
+global using System.Collections.Generic;
+global using System.Collections;
+

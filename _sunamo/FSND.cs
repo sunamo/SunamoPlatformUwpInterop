@@ -72,7 +72,7 @@ nad
     //    {
     //        if (v != string.Empty)
     //        {
-    //            v = v.TrimEnd(AllCharsSE.bs) + AllCharsSE.bs;
+    //            v = v.TrimEnd(AllChars.bs) + AllChars.bs;
     //        }
 
     //        FirstCharUpper(ref v);
