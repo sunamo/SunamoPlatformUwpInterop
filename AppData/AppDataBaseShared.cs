@@ -1,7 +1,7 @@
 
 namespace SunamoPlatformUwpInterop;
-using SunamoPlatformUwpInterop._sunamo;
-using SunamoPlatformUwpInterop.Args;
+
+
 
 public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<StorageFolder, StorageFile>
 {
