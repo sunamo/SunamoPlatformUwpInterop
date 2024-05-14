@@ -30,6 +30,11 @@
     <Compile Include="..\SunamoExceptions\_AddedToAllCsproj\CASunamoExceptions.cs" Link="_linked\SunamoExceptions\_AddedToAllCsproj\CASunamoExceptions.cs" />
     <Compile Include="..\SunamoExceptions\OnlyInSE\Types.cs" Link="_linked\SunamoExceptions\OnlyInSE\Types.cs" />
     <Compile Include="..\SunamoXlfKeys\XlfKeys.cs" Link="_linked\SunamoXlfKeys\XlfKeys.cs" />
+    <Compile Include="..\SunamoExceptions\InSunamoIsDerivedFrom\TFSE.cs" Link="_linked\SunamoExceptions\InSunamoIsDerivedFrom\TFSE.cs" />
+    <Compile Include="..\SunamoStringParts\SHParts.cs" Link="_linked\SunamoStringParts\SHParts.cs" />
+    <Compile Include="..\SunamoFileSystem\FSND.cs" Link="_linked\SunamoFileSystem\FSND.cs" />
+    <Compile Include="..\SunamoParsing\TryParse.cs" Link="_linked\SunamoParsing\TryParse.cs" />
+    <Compile Include="..\SunamoParsing\Parse.cs" Link="_linked\SunamoParsing\Parse.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Args\" />
