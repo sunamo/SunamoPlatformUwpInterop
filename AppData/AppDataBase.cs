@@ -1,30 +1,27 @@
-namespace SunamoPlatformUwpInterop;
-
-
+﻿namespace
+#if SunamoHttp
+SunamoHttp
+#else
+SunamoPlatformUwpInterop
+#endif
+;
 /// <summary>
 ///
 /// </summary>
 public abstract partial class AppDataBase<StorageFolder, StorageFile>
 {
-
     public T ReadFileOfSettingsWorker<T>(IDictionary<string, T> loadedSettingsOther, string key)
     {
         //ThrowEx.IsWindowsPathFormat(key, FS.IsWindowsPathFormat);
-
         if (!loadedSettingsOther.ContainsKey(key))
         {
             throw new Exception($"{key} was not found in dictionary, probably was not specified as deps in calling CreateAppFoldersIfDontExists");
         }
-
         return loadedSettingsOther[key];
     }
-
     public AppDataBase()
     {
     }
-
-
-
     /// <summary>
     /// Save file A1 to folder AF Settings with value A2.
     /// </summary>
@@ -35,7 +32,6 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile>
         StorageFile fileToSave = AbstractNon.GetFile(AppFolders.Settings, file);
         AbstractNon.SaveFile(value, fileToSave);
     }
-
     /// <summary>
     /// Save file A2 to AF A1 with contents A3
     /// </summary>
@@ -48,12 +44,10 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile>
         SaveFile(value, fileToSave);
         return fileToSave;
     }
-
     private void SaveFile(string value, StorageFile fileToSave)
     {
         throw new NotImplementedException();
     }
-
     /// <summary>
     /// Append to file A2 in AF A1 with contents A3
     /// </summary>
@@ -69,13 +63,11 @@ void
     AppendAllText(AppFolders af, string file, string value)
     {
         var fileToSave = AbstractNon.GetFile(af, file);
-
 #if ASYNC
         await
 #endif
         AppendAllText(fileToSave.ToString(), value);
     }
-
     /// <summary>
     /// Just call TF.AppendAllText
     /// </summary>
@@ -89,10 +81,11 @@ void
 #endif
     AppendAllText(string file, string value)
     {
-
 #if ASYNC
         await
 #endif
         TFSE.AppendAllText(file, value);
     }
 }
+
+

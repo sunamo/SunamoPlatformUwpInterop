@@ -1,6 +1,6 @@
 namespace SunamoPlatformUwpInterop;
 
-//namespace SunamoPlatformUwpInterop._sunamo;
+//namespace SunamoPlatformUwpInterop;
 
 internal class FSND
 {

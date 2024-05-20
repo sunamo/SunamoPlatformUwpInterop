@@ -1,29 +1,25 @@
-
-
-namespace SunamoPlatformUwpInterop;
-
-
-
+namespace
+#if SunamoHttp
+SunamoHttp
+#else
+SunamoPlatformUwpInterop
+#endif
+;
 public partial class AppData : AppDataAbstractBase<string, string>
 {
     public static AppData ci = new AppData();
     static Type type = typeof(AppData);
-
     private AppData()
     {
-
     }
-
     public override string GetSunamoFolder()
     {
         return sunamoFolder;
     }
-
     public override string GetFileInSubfolder(AppFolders output, string subfolder, string file, string ext)
     {
         return AppData.ci.GetFile(AppFolders.Output, subfolder + @"\" + file + ext);
     }
-
     /// <summary>
     /// Return always in User's AppData
     /// </summary>
@@ -41,14 +37,11 @@ public partial class AppData : AppDataAbstractBase<string, string>
         {
             return Path.Combine(sunamo2, "Common");
         }
-
         return sunamo2;
     }
-
     public override string GetFileString(string af, string file, bool pa = false)
     {
         string slozka2, soubor;
-
         // if (Exc.aspnet)
         // {
         //     slozka2 = Path.Combine(basePath, af.ToString());
@@ -62,28 +55,23 @@ public partial class AppData : AppDataAbstractBase<string, string>
         {
             rf = RootFolderPa;
         }
-
         slozka2 = Path.Combine(rf, af.ToString());
         soubor = Path.Combine(slozka2, file);
         return soubor;
         //}
     }
-
     public string GetFileString(string af, string file)
     {
         return GetFileString(af, file, false);
     }
-
     public override string GetFile(AppFolders af, string file)
     {
         return GetFileString(af.ToString(), file);
     }
-
     public string GetFileAppTypeAgnostic(AppFolders af, string file)
     {
         return GetFileString(af.ToString(), file, true);
     }
-
     public override string GetFolder(AppFolders af)
     {
         var f = RootFolder;
@@ -91,27 +79,18 @@ public partial class AppData : AppDataAbstractBase<string, string>
         // {
         //     f = basePath;
         // }
-
         string vr = Path.Combine(f, af.ToString());
         vr = vr.TrimEnd('\\') + "\\";
         return vr;
     }
-
     public override bool IsRootFolderOk()
     {
         if (string.IsNullOrEmpty(rootFolder))
         {
             return false;
         }
-
         return Directory.Exists(rootFolder);
     }
-
-
-
-
-
-
     /// <summary>
     /// Bylo by fajn si napsat kdy se rootFolder nastavuje volá abych příště mohl rychleji chybu opravit
     ///
@@ -129,7 +108,6 @@ public partial class AppData : AppDataAbstractBase<string, string>
         }
         return true;
     }
-
     public override
 #if ASYNC
     async Task
@@ -138,22 +116,18 @@ void
 #endif
     AppendAllText(string content, string sf)
     {
-
 #if ASYNC
         await
 #endif
         TFSE.AppendAllText(sf, content);
     }
-
     public string GetRootFolderForApp(string rootFolderFromCreatedAppData, string app)
     {
         return Path.Combine(Path.GetDirectoryName(rootFolderFromCreatedAppData), app);
     }
-
     public override string GetRootFolder(string ThisAppName)
     {
         rootFolder = GetSunamoFolder();
-
         //pa ? SHParts.RemoveAfterFirst(ThisApp.Name, AllChars.dot) :
         RootFolder = Path.Combine(rootFolder, ThisAppName);
         RootFolderPa = Path.Combine(Path.GetDirectoryName(rootFolder), SHParts.RemoveAfterFirst(ThisAppName, AllStrings.dot));
@@ -161,7 +135,6 @@ void
         Directory.CreateDirectory(RootFolderPa);
         return RootFolder;
     }
-
     /// <summary>
     /// Zůstane to pojmenované SaveFile protože mám tu další metoday Save*
     /// </summary>
@@ -176,13 +149,11 @@ void
 #endif
     SaveFile(string content, string sf)
     {
-
 #if ASYNC
         await
 #endif
         TFSE.WriteAllText(sf, content);
     }
-
     public override
 #if ASYNC
     async Task
@@ -193,8 +164,6 @@ void
     {
         ThrowEx.NotImplementedMethod();
     }
-
-
     /// <summary>
     /// Dont use - instead of this GetCommonSettings
     /// Without ext because all is crypted and in bytes
@@ -207,17 +176,9 @@ void
         var vr = Path.Combine(fc, AppFolders.Settings.ToString(), filename);
         return vr;
     }
-
-
-
-
-
     public override void SetCommonSettings(string key, string value)
     {
         var file = GetFileCommonSettings(key);
-
         TFSE.WriteAllBytes(file, RijndaelBytesEncrypt(Encoding.UTF8.GetBytes(value).ToList()));
     }
-
-
 }
