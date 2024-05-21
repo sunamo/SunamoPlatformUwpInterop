@@ -3,7 +3,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>24.2.7.1</Version>
+    <Version>24.5.21.1</Version>
     <Description>One of base foundation for sunamo's app platform - second is SunamoThisApp</Description>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -13,23 +13,6 @@
     <DefineConstants>$(DefineConstants);ASYNC;SunamoPlatformUwpInterop</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\SunamoExceptions\OnlyInSE\Exc.cs" Link="_linked\SunamoExceptions\OnlyInSE\Exc.cs" />
-    <Compile Include="..\SunamoExceptions\OnlyInSE\Exceptions.cs" Link="_linked\SunamoExceptions\OnlyInSE\Exceptions.cs" />
-    <Compile Include="..\SunamoExceptions\OnlyInSE\TranslateAble.cs" Link="_linked\SunamoExceptions\OnlyInSE\TranslateAble.cs" />
-    <Compile Include="..\SunamoExceptions\_AddedToAllCsproj\CASunamoExceptions.cs" Link="_linked\SunamoExceptions\_AddedToAllCsproj\CASunamoExceptions.cs" />
-    <Compile Include="..\SunamoExceptions\_AddedToAllCsproj\FSSunamoExceptions.cs" Link="_linked\SunamoExceptions\_AddedToAllCsproj\FSSunamoExceptions.cs" />
-    <Compile Include="..\SunamoExceptions\_AddedToAllCsproj\SHSunamoExceptions.cs" Link="_linked\SunamoExceptions\_AddedToAllCsproj\SHSunamoExceptions.cs" />
-    <Compile Include="..\SunamoValues\AllChars.cs" Link="_linked\SunamoValues\AllChars.cs" />
-    <Compile Include="..\SunamoValues\AllStrings.cs" Link="_linked\SunamoValues\AllStrings.cs" />
-    <Compile Include="..\SunamoValues\Consts.cs" Link="_linked\SunamoValues\Consts.cs" />
-    <Compile Include="..\SunamoExceptions\OnlyInSE\ThrowEx.cs" Link="_linked\SunamoExceptions\OnlyInSE\ThrowEx.cs" />
-    <Compile Include="..\SunamoEnums\Enums\AppFolders.cs" Link="_linked\SunamoEnums\Enums\AppFolders.cs" />
-    <Compile Include="..\SunamoArgs\CreateAppFoldersIfDontExistsArgs.cs" Link="_linked\SunamoArgs\CreateAppFoldersIfDontExistsArgs.cs" />
-    <Compile Include="..\SunamoExceptions\Delegates\ExistsDirectory.cs" Link="_linked\SunamoExceptions\Delegates\ExistsDirectory.cs" />
-    <Compile Include="..\SunamoEnums\Enums\CachedSettingsKeys.cs" Link="_linked\SunamoEnums\Enums\CachedSettingsKeys.cs" />
-    <Compile Include="..\SunamoInterfaces\Interfaces\ITextBuilder.cs" Link="_linked\SunamoInterfaces\Interfaces\ITextBuilder.cs" />
-    <Compile Include="..\SunamoXlfKeys\XlfKeys.cs" Link="_linked\SunamoXlfKeys\XlfKeys.cs" />
-    <Compile Include="..\SunamoExceptions\InSunamoIsDerivedFrom\TFSE.cs" Link="_linked\SunamoExceptions\InSunamoIsDerivedFrom\TFSE.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Args\" />
