@@ -28,6 +28,8 @@
     <Compile Include="..\SunamoExceptions\Delegates\ExistsDirectory.cs" Link="_linked\SunamoExceptions\Delegates\ExistsDirectory.cs" />
     <Compile Include="..\SunamoEnums\Enums\CachedSettingsKeys.cs" Link="_linked\SunamoEnums\Enums\CachedSettingsKeys.cs" />
     <Compile Include="..\SunamoInterfaces\Interfaces\ITextBuilder.cs" Link="_linked\SunamoInterfaces\Interfaces\ITextBuilder.cs" />
+    <Compile Include="..\SunamoXlfKeys\XlfKeys.cs" Link="_linked\SunamoXlfKeys\XlfKeys.cs" />
+    <Compile Include="..\SunamoExceptions\InSunamoIsDerivedFrom\TFSE.cs" Link="_linked\SunamoExceptions\InSunamoIsDerivedFrom\TFSE.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Args\" />

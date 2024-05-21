@@ -46,7 +46,7 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile>
     }
     private void SaveFile(string value, StorageFile fileToSave)
     {
-        throw new NotImplementedException();
+        ThrowEx.NotImplementedMethod();
     }
     /// <summary>
     /// Append to file A2 in AF A1 with contents A3
