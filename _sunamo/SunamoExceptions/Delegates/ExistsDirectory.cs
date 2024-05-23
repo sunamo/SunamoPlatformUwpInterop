@@ -7,4 +7,4 @@ namespace SunamoPlatformUwpInterop;
 ///     Return bool? due to signalling unauthorized access - for example access .xlf in uwp
 /// </summary>
 /// <param name="path"></param>
-internal delegate bool? ExistsDirectory(string path);
+public delegate bool? ExistsDirectory(string path);

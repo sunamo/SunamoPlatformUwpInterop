@@ -2,14 +2,14 @@ namespace SunamoPlatformUwpInterop;
 
 //namespace SunamoPlatformUwpInterop;
 
-internal class FSND
+public class FSND
 {
-    internal static void CreateUpfoldersPsysicallyUnlessThere(string nad)
+    public static void CreateUpfoldersPsysicallyUnlessThere(string nad)
     {
         CreateFoldersPsysicallyUnlessThere(Path.GetDirectoryName(nad));
     }
 
-    internal static void CreateFoldersPsysicallyUnlessThere(string nad)
+    public static void CreateFoldersPsysicallyUnlessThere(string nad)
     {
         ThrowEx.IsNullOrEmpty("nad", nad);
         ThrowEx.IsNotWindowsPathFormat("nad", nad);
@@ -51,14 +51,14 @@ nad
     }
 
 
-    //    internal static Func<string, bool> IsWindowsPathFormat;
-    //    internal static Func<string, string> GetDirectoryName;
-    //    internal static Action<string> CreateDirectory;
-    //    internal static Func<string, bool> ExistsDirectory;
-    //    internal static Action<string> CreateUpfoldersPsysicallyUnlessThere;
-    //    internal static Action<string> CreateFoldersPsysicallyUnlessThere;
+    //    public static Func<string, bool> IsWindowsPathFormat;
+    //    public static Func<string, string> GetDirectoryName;
+    //    public static Action<string> CreateDirectory;
+    //    public static Func<string, bool> ExistsDirectory;
+    //    public static Action<string> CreateUpfoldersPsysicallyUnlessThere;
+    //    public static Action<string> CreateFoldersPsysicallyUnlessThere;
 
-    //    internal static string WithEndSlash(string v)
+    //    public static string WithEndSlash(string v)
     //    {
     //        return WithEndSlash(ref v);
     //    }
@@ -68,7 +68,7 @@ nad
     //    /// </summary>
     //    /// <param name="v"></param>
     //    /// <returns></returns>
-    //    internal static string WithEndSlash(ref string v)
+    //    public static string WithEndSlash(ref string v)
     //    {
     //        if (v != string.Empty)
     //        {
@@ -79,12 +79,12 @@ nad
     //        return v;
     //    }
 
-    //    internal static void FirstCharUpper(ref string nazevPP)
+    //    public static void FirstCharUpper(ref string nazevPP)
     //    {
     //        nazevPP = FirstCharUpper(nazevPP);
     //    }
 
-    //    internal static string FirstCharUpper(string nazevPP)
+    //    public static string FirstCharUpper(string nazevPP)
     //    {
     //        if (nazevPP.Length == 1)
     //        {

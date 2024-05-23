@@ -4,19 +4,19 @@ namespace SunamoPlatformUwpInterop;
 /// <summary>
 /// Musejí být všechny init protože už dále nedělám žádné checky na null
 /// </summary>
-internal class CreateAppFoldersIfDontExistsArgs
+public class CreateAppFoldersIfDontExistsArgs
 {
-    internal string AppName = "";
+    public string AppName = "";
     /// <summary>
     /// override
     /// </summary>
-    internal List<string> keysCommonSettings = new List<string>();
+    public List<string> keysCommonSettings = new List<string>();
     /// <summary>
     /// vylepšení pro non uwp apps
     /// </summary>
-    internal List<string> keysSettingsList = new List<string>();
-    internal List<string> keysSettingsBool = new List<string>();
-    internal List<string> keysSettingsOther = new List<string>();
-    internal Func<List<byte>, List<byte>> RijndaelBytesDecrypt;
-    internal Func<List<byte>, List<byte>> RijndaelBytesEncrypt;
+    public List<string> keysSettingsList = new List<string>();
+    public List<string> keysSettingsBool = new List<string>();
+    public List<string> keysSettingsOther = new List<string>();
+    public Func<List<byte>, List<byte>> RijndaelBytesDecrypt;
+    public Func<List<byte>, List<byte>> RijndaelBytesEncrypt;
 }
