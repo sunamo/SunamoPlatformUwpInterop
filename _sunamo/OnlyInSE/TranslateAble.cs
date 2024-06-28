@@ -1,3 +1,5 @@
+
+namespace SunamoPlatformUwpInterop;
 public class TranslateAble
 {
     

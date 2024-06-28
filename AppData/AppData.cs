@@ -1,3 +1,5 @@
+
+namespace SunamoPlatformUwpInterop;
 public partial class AppData : AppDataAbstractBase<string, string>
 {
     public static AppData ci = new AppData();

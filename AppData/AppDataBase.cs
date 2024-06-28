@@ -1,3 +1,5 @@
+
+namespace SunamoPlatformUwpInterop;
 /// <summary>
 ///
 /// </summary>
