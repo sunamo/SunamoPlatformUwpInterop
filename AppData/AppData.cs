@@ -1,10 +1,3 @@
-namespace
-#if SunamoHttp
-SunamoHttp
-#else
-SunamoPlatformUwpInterop
-#endif
-;
 public partial class AppData : AppDataAbstractBase<string, string>
 {
     public static AppData ci = new AppData();

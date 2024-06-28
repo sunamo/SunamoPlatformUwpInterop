@@ -1,10 +1,3 @@
-﻿namespace
-#if SunamoHttp
-SunamoHttp
-#else
-SunamoPlatformUwpInterop
-#endif
-;
 /// <summary>
 ///
 /// </summary>
@@ -87,5 +80,6 @@ void
         TFSE.AppendAllText(file, value);
     }
 }
+
 
 
