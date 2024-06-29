@@ -189,7 +189,7 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
     /// </summary>
     /// <param name="keysCommonSettings"></param>
     /// <param name=""></param>
-    public void CreateAppFoldersIfDontExists(CreateAppFoldersIfDontExistsArgs a)
+    public void CreateAppDirsIfDontExists(CreateAppDirsIfDontExistsArgs a)
     {
         RijndaelBytesEncrypt = a.RijndaelBytesEncrypt;
 

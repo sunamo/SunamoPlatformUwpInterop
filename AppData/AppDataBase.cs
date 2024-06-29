@@ -10,7 +10,7 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile>
         //ThrowEx.IsWindowsPathFormat(key, FS.IsWindowsPathFormat);
         if (!loadedSettingsOther.ContainsKey(key))
         {
-            throw new Exception($"{key} was not found in dictionary, probably was not specified as deps in calling CreateAppFoldersIfDontExists");
+            throw new Exception($"{key} was not found in dictionary, probably was not specified as deps in calling CreateAppDirsIfDontExists");
         }
         return loadedSettingsOther[key];
     }
