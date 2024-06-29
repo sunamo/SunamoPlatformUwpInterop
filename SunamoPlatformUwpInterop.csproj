@@ -16,5 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Args\" />
+    <Folder Include="_sunamo\SunamoExceptions\Delegates\" />
+    <Folder Include="_sunamo\SunamoInterfaces\Interfaces\" />
   </ItemGroup>
 </Project>

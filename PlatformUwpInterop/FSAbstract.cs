@@ -2,7 +2,7 @@ namespace SunamoPlatformUwpInterop;
 
 public class FSAbstract<StorageFolder, StorageFile>
 {
-    public ExistsDirectory existsDirectory;
+    public Func<string, bool?> existsDirectory;
     /// <summary>
     /// From storage folder and name
     /// </summary>
