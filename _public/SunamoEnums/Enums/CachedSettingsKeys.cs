@@ -1,9 +1,9 @@
 namespace SunamoPlatformUwpInterop;
 
 
-/// <summary>
-/// Toto vždy používat jen společně s CachedSettings!!!
-/// </summary>
+
+
+
 public enum CachedSettingsKeys
 {
     vsFolderWithProjectsFolders,
