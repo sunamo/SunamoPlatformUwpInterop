@@ -1,5 +1,5 @@
 
-namespace SunamoPlatformUwpInterop;
+namespace SunamoPlatformUwpInterop._sunamo.SunamoValues;
 internal class AllChars
 {
     internal static List<char> vsZnakyWithoutSpecial;

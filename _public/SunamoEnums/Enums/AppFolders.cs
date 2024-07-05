@@ -1,4 +1,4 @@
-namespace SunamoPlatformUwpInterop;
+namespace SunamoPlatformUwpInterop._public.SunamoEnums.Enums;
 
 
 public enum AppFolders

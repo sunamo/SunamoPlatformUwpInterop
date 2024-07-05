@@ -1,4 +1,4 @@
-namespace SunamoPlatformUwpInterop;
+namespace SunamoPlatformUwpInterop.AppData;
 
 public abstract class AppDataAppsAbstractBase<StorageFolder, StorageFile> : AppDataBase<StorageFolder, StorageFile>
 {
@@ -11,7 +11,7 @@ public abstract class AppDataAppsAbstractBase<StorageFolder, StorageFile> : AppD
 
 
     /// <summary>
-    /// Pokud rootFolder bude SE nebo null, G false, jinak vrátí zda rootFolder existuej ve FS
+    /// Pokud rootFolder bude SE nebo null, G false, jinak vrï¿½tï¿½ zda rootFolder existuej ve FS
     /// </summary>
     public abstract bool IsRootFolderOk();
     public abstract

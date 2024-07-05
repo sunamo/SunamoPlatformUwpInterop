@@ -1,5 +1,5 @@
 
-namespace SunamoPlatformUwpInterop;
+namespace SunamoPlatformUwpInterop._sunamo.SunamoExceptions.OnlyInSE;
 using System.Diagnostics;
 using System.Text;
 

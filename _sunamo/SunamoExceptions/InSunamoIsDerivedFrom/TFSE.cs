@@ -1,4 +1,4 @@
-namespace SunamoPlatformUwpInterop;
+namespace SunamoPlatformUwpInterop._sunamo.SunamoExceptions.InSunamoIsDerivedFrom;
 
 
 internal class TFSE
