@@ -1,4 +1,3 @@
-
 namespace SunamoPlatformUwpInterop.AppData;
 public partial class AppData : AppDataAbstractBase<string, string>
 {

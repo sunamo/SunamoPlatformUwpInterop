@@ -1,4 +1,3 @@
-
 namespace SunamoPlatformUwpInterop._sunamo.SunamoExceptions.OnlyInSE;
 internal class TranslateAble
 {

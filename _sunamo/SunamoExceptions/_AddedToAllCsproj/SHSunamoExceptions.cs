@@ -1,4 +1,3 @@
-
 namespace SunamoPlatformUwpInterop._sunamo.SunamoExceptions._AddedToAllCsproj;
 internal class SHSunamoExceptions
 {

@@ -1,4 +1,3 @@
-
 namespace SunamoPlatformUwpInterop._sunamo.SunamoValues;
 internal class AllStrings
 {

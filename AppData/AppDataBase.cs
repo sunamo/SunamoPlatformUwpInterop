@@ -1,4 +1,3 @@
-
 namespace SunamoPlatformUwpInterop.AppData;
 
 public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<StorageFolder, StorageFile>
@@ -431,6 +430,3 @@ void
         return ReadFileOfSettingsWorker<bool>(loadedSettingsBool, key);
     }
 }
-
-
-

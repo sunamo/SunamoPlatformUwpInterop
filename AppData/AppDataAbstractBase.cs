@@ -1,4 +1,3 @@
-
 namespace SunamoPlatformUwpInterop.AppData;
 
 public abstract class AppDataAbstractBase<StorageFolder, StorageFile> : AppDataBase<StorageFolder, StorageFile>
