@@ -142,7 +142,7 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
         _fileFolderWithAppsFiles = Path.Combine(slozka, folderWithAppsFiles);
 
 
-        FSND.CreateUpfoldersPsysicallyUnlessThere(_fileFolderWithAppsFiles);
+        FS.CreateUpfoldersPsysicallyUnlessThere(_fileFolderWithAppsFiles);
 
 
 
@@ -260,7 +260,7 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
         foreach (AppFolders item in Enum.GetValues(typeof(AppFolders)))
         {
 
-            FSND.CreateFoldersPsysicallyUnlessThere(GetFolder(item).ToString());
+            FS.CreateFoldersPsysicallyUnlessThere(GetFolder(item).ToString());
 
 
             Directory.CreateDirectory(AbstractNon.GetFolder(item).ToString());

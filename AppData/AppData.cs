@@ -1,3 +1,5 @@
+using SunamoPlatformUwpInterop.Args;
+
 namespace SunamoPlatformUwpInterop.AppData;
 public partial class AppData : AppDataAbstractBase<string, string>
 {
@@ -6,9 +8,64 @@ public partial class AppData : AppDataAbstractBase<string, string>
     private AppData()
     {
     }
+
+    //private string RemoveProjectDisctinction(string basePath)
+    //{
+    //    if (string.IsNullOrEmpty(basePath))
+    //        return basePath;
+    //    var p = SH.Split(basePath, AllChars.bs);
+    //    var l = p[p.Count - 1];
+    //    //var lbs = l[l.Length - 1] == AllChars.bs;
+    //    if (l.Contains("."))
+    //    {
+    //        l = SH.RemoveAfterLast(AllChars.dot, l);
+    //        p[p.Count - 1] = l;
+    //    }
+
+    //    return FS.CombineDir(p.ToArray());
+    //}
+
+    /// <summary>
+    /// Dříve měla string basePath = null ale nevím k čemu se využíval
+    /// </summary>
+    public void CreateAppFoldersIfDontExists(CreateAppFoldersIfDontExistsArgs a)
+    {
+        //basePath = RemoveProjectDisctinction(basePath);
+
+        if (!string.IsNullOrEmpty(a.AppName))
+        {
+            RootFolder = GetRootFolder(a.AppName);
+
+            foreach (AppFolders item in Enum.GetValues(typeof(AppFolders)))
+            {
+                FS.CreateFoldersPsysicallyUnlessThere(GetFolder(item));
+            }
+        }
+        else
+        {
+            ThrowEx.Custom("Nen\u00ED vypln\u011Bno n\u00E1zev aplikace.");
+        }
+
+    }
+
     public override string GetSunamoFolder()
     {
+
+        string r = AppData.ci.GetFolderWithAppsFiles();
+        // Here I can't use TF.ReadFile
+        string sunamoFolder = File.ReadAllText(r);
+
+        if (char.IsLower(sunamoFolder[0]))
+        {
+            ThrowEx.FirstLetterIsNotUpper(sunamoFolder);
+        }
+
+        if (string.IsNullOrWhiteSpace(sunamoFolder))
+        {
+            sunamoFolder = Path.Combine(SpecialFoldersHelper.AppDataRoaming(), Consts.@sunamo);
+        }
         return sunamoFolder;
+
     }
     public override string GetFileInSubfolder(AppFolders output, string subfolder, string file, string ext)
     {
@@ -54,6 +111,7 @@ public partial class AppData : AppDataAbstractBase<string, string>
         return soubor;
         //}
     }
+
     public string GetFileString(string af, string file)
     {
         return GetFileString(af, file, false);
