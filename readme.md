@@ -1,6 +1,6 @@
 ### SunamoPlatformUwpInterop
 
-Part of PlatformIndependentNuGetPackages:
+Root of PlatformIndependentNuGetPackages:
 
 - [nuget.org](https://www.nuget.org/profiles/sunamo)
 - [github.org](https://github.com/sunamo/PlatformIndependentNuGetPackages)
