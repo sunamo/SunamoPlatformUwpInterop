@@ -1,4 +1,4 @@
-namespace SunamoPlatformUwpInterop._sunamo.SunamoFileSystem;
+//namespace SunamoPlatformUwpInterop._sunamo.SunamoFileSystem;
 
 internal class FS
 {
@@ -19,9 +19,9 @@ internal class FS
         }
 
         List<string> slozkyKVytvoreni = new List<string>
-{
-nad
-};
+        {
+            nad
+        };
 
         while (true)
         {
@@ -92,4 +92,5 @@ nad
     //        string sb = nazevPP.Substring(1);
     //        return nazevPP[0].ToString().ToUpper() + sb;
     //    }
+
 }

@@ -1,6 +1,6 @@
-using SunamoPlatformUwpInterop.Args;
 
 namespace SunamoPlatformUwpInterop.AppData;
+using SunamoPlatformUwpInterop.Args;
 
 public partial class AppData : AppDataAbstractBase<string, string>
 {
