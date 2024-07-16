@@ -18,7 +18,7 @@ string
 #if ASYNC
             await
 #endif
-            TFSE.ReadAllText(AppData.ci.GetFileCommonSettings(k.ToString())));
+            TF.ReadAllText(AppData.ci.GetFileCommonSettings(k.ToString())));
         }
         return cs[k];
     }

@@ -225,7 +225,7 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
         #region Prvně musím sunamoFolder, z ní jsem potom dále schopen odvodit root folder
         string r = AppData.ci.GetFolderWithAppsFiles();
         // Here I can't use TF.ReadAllText
-        sunamoFolder = TFSE.ReadAllTextSync(r);
+        sunamoFolder = TF.ReadAllTextSync(r);
 
         if (char.IsLower(sunamoFolder[0]))
         {
@@ -278,7 +278,7 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
 
             if (key.StartsWith("!"))
             {
-                var b = TFSE.ReadAllBytesSync(file);
+                var b = TF.ReadAllBytesSync(file);
                 var b2 = a.RijndaelBytesDecrypt(b);
                 var b3 = b2.ToArray();
                 var vr = Encoding.UTF8.GetString(b3);
@@ -289,7 +289,7 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
             else
             {
                 // Must be File
-                loadedCommonSettings.Add(keyTrimmed, TFSE.ReadAllTextSync(file));
+                loadedCommonSettings.Add(keyTrimmed, TF.ReadAllTextSync(file));
             }
         }
         #endregion
@@ -299,7 +299,7 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
 
         foreach (var item in a.keysSettingsList)
         {
-            loadedSettingsList.Add(item, TFSE.ReadAllLinesSync(GetPathForSettingsFile(item), true));
+            loadedSettingsList.Add(item, TF.ReadAllLinesSync(GetPathForSettingsFile(item), true));
         }
         #endregion
 
@@ -309,13 +309,13 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
         foreach (var item in a.keysSettingsBool)
         {
             var path = GetPathForSettingsFile(item);
-            var text = TFSE.ReadAllTextSync(path);
+            var text = TF.ReadAllTextSync(path);
             bool.TryParse(text, out var isBool);
 
             if (!isBool)
             {
                 //ThisApp.Warning($"In ${path} was not boolean value, was written default false");
-                TFSE.WriteAllTextSync(path, bool.FalseString);
+                File.WriteAllText(path, bool.FalseString);
                 text = bool.FalseString;
             }
 
@@ -329,7 +329,7 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
         foreach (var item in a.keysSettingsOther)
         {
             var path = GetPathForSettingsFile(item);
-            loadedSettingsOther.Add(item, TFSE.ReadAllTextSync(path, true));
+            loadedSettingsOther.Add(item, TF.ReadAllTextSync(path, true));
         }
         #endregion
         #endregion
@@ -409,11 +409,11 @@ void
 #if ASYNC
         await
 #endif
-            TFSE.AppendAllText(file, value);
+            TF.AppendAllText(file, value);
     }
 
     /// <summary>
-    /// If file A1 dont exists, then create him with empty content and G SE. When optained file/folder doesnt exists, return SE
+    /// If file A1 dont exists, then create him with empty content and G . When optained file/folder doesnt exists, return SE
     /// </summary>
     /// <param name = "key"></param>
     public string ReadFileOfSettingsExistingDirectoryOrFile(string key)

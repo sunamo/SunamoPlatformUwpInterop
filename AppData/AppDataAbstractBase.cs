@@ -5,7 +5,7 @@ public abstract class AppDataAbstractBase<StorageFolder, StorageFile> : AppDataB
     public abstract StorageFolder GetRootFolder(string ThisAppName);
 
     /// <summary>
-    /// If file A1 dont exists, then create him with empty content and G SE. When optained file/folder doesnt exists, return it anyway
+    /// If file A1 dont exists, then create him with empty content and G . When optained file/folder doesnt exists, return it anyway
     /// </summary>
     /// <param name = "path"></param>
     public string ReadFileOfSettingsDirectoryOrFile(string key)

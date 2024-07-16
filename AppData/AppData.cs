@@ -1,6 +1,7 @@
 using SunamoPlatformUwpInterop.Args;
 
 namespace SunamoPlatformUwpInterop.AppData;
+
 public partial class AppData : AppDataAbstractBase<string, string>
 {
     public static AppData ci = new AppData();
@@ -13,12 +14,12 @@ public partial class AppData : AppDataAbstractBase<string, string>
     //{
     //    if (string.IsNullOrEmpty(basePath))
     //        return basePath;
-    //    var p = SH.Split(basePath, AllChars.bs);
+    //    var p = .Split(basePath, AllChars.bs);
     //    var l = p[p.Count - 1];
     //    //var lbs = l[l.Length - 1] == AllChars.bs;
     //    if (l.Contains("."))
     //    {
-    //        l = SH.RemoveAfterLast(AllChars.dot, l);
+    //        l = .RemoveAfterLast(AllChars.dot, l);
     //        p[p.Count - 1] = l;
     //    }
 
@@ -171,7 +172,7 @@ void
 #if ASYNC
         await
 #endif
-        TFSE.AppendAllText(sf, content);
+        TF.AppendAllText(sf, content);
     }
     public string GetRootFolderForApp(string rootFolderFromCreatedAppData, string app)
     {
@@ -204,7 +205,7 @@ void
 #if ASYNC
         await
 #endif
-        TFSE.WriteAllText(sf, content);
+        TF.WriteAllText(sf, content);
     }
     public override
 #if ASYNC
@@ -231,6 +232,6 @@ void
     public override void SetCommonSettings(string key, string value)
     {
         var file = GetFileCommonSettings(key);
-        TFSE.WriteAllBytes(file, RijndaelBytesEncrypt(Encoding.UTF8.GetBytes(value).ToList()));
+        TF.WriteAllBytes(file, RijndaelBytesEncrypt(Encoding.UTF8.GetBytes(value).ToList()));
     }
 }

@@ -1,6 +1,5 @@
 namespace SunamoPlatformUwpInterop.AppData;
 
-
 /// <summary>
 ///
 /// </summary>

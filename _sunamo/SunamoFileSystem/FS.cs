@@ -1,7 +1,5 @@
 namespace SunamoPlatformUwpInterop._sunamo.SunamoFileSystem;
 
-//namespace SunamoPlatformUwpInterop;
-
 internal class FS
 {
     internal static void CreateUpfoldersPsysicallyUnlessThere(string nad)
