@@ -1,4 +1,4 @@
-//namespace SunamoPlatformUwpInterop._sunamo.SunamoFileSystem;
+namespace SunamoPlatformUwpInterop._sunamo.SunamoFileSystem;
 
 internal class FS
 {

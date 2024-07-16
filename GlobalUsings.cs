@@ -18,3 +18,5 @@ global using SunamoPlatformUwpInterop._sunamo.SunamoExceptions.InSunamoIsDerived
 global using SunamoPlatformUwpInterop._sunamo.SunamoExceptions.OnlyInSE;
 global using System.Diagnostics;
 global using System.Net;
+global using SunamoPlatformUwpInterop.PlatformUwpInterop;
+global using SunamoPlatformUwpInterop._sunamo.SunamoFileSystem;
