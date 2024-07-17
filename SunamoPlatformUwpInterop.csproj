@@ -12,6 +12,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
+    <PackageReleaseNotes>Renamed arg class</PackageReleaseNotes>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>$(DefineConstants);ASYNC;SunamoPlatformUwpInterop;SunamoPlatformUwpInterop.csproj</DefineConstants>
@@ -23,6 +24,7 @@
     <None Include="readme.md" Pack="True" PackagePath="." />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="_public\SunamoArgs\" />
     <Folder Include="_sunamo\SunamoExceptions\Delegates\" />
     <Folder Include="_sunamo\SunamoInterfaces\Interfaces\" />
   </ItemGroup>
