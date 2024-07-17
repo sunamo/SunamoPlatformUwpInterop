@@ -147,7 +147,7 @@ public partial class AppData : AppDataAbstractBase<string, string>
     /// <summary>
     /// Bylo by fajn si napsat kdy se rootFolder nastavuje volá abych příště mohl rychleji chybu opravit
     ///
-    /// Nastvuje se v GetRootFolder jež se volá pouze v CreateAppDirsIfDontExists
+    /// Nastvuje se v GetRootFolder jež se volá pouze v CreateAppFoldersIfDontExists
     ///
     /// </summary>
     /// <returns></returns>
