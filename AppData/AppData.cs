@@ -26,28 +26,28 @@ public partial class AppData : AppDataAbstractBase<string, string>
     //    return FS.CombineDir(p.ToArray());
     //}
 
-    /// <summary>
-    /// Dříve měla string basePath = null ale nevím k čemu se využíval
-    /// </summary>
-    public void CreateAppFoldersIfDontExists(CreateAppFoldersIfDontExistsArgs a)
-    {
-        //basePath = RemoveProjectDisctinction(basePath);
+    ///// <summary>
+    ///// Dříve měla string basePath = null ale nevím k čemu se využíval
+    ///// </summary>
+    //public void CreateAppFoldersIfDontExists(CreateAppFoldersIfDontExistsArgs a)
+    //{
+    //    //basePath = RemoveProjectDisctinction(basePath);
 
-        if (!string.IsNullOrEmpty(a.AppName))
-        {
-            RootFolder = GetRootFolder(a.AppName);
+    //    if (!string.IsNullOrEmpty(a.AppName))
+    //    {
+    //        RootFolder = GetRootFolder(a.AppName);
 
-            foreach (AppFolders item in Enum.GetValues(typeof(AppFolders)))
-            {
-                FS.CreateFoldersPsysicallyUnlessThere(GetFolder(item));
-            }
-        }
-        else
-        {
-            ThrowEx.Custom("Nen\u00ED vypln\u011Bno n\u00E1zev aplikace.");
-        }
+    //        foreach (AppFolders item in Enum.GetValues(typeof(AppFolders)))
+    //        {
+    //            FS.CreateFoldersPsysicallyUnlessThere(GetFolder(item));
+    //        }
+    //    }
+    //    else
+    //    {
+    //        ThrowEx.Custom("Nen\u00ED vypln\u011Bno n\u00E1zev aplikace.");
+    //    }
 
-    }
+    //}
 
     public override string GetSunamoFolder()
     {

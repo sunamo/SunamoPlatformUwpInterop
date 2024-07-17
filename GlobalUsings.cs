@@ -20,3 +20,6 @@ global using System.Diagnostics;
 global using System.Net;
 global using SunamoPlatformUwpInterop.PlatformUwpInterop;
 global using SunamoPlatformUwpInterop._sunamo.SunamoFileSystem;
+global using SunamoPlatformUwpInterop;
+global using SunamoPlatformUwpInterop._sunamo;
+global using SunamoPlatformUwpInterop._sunamo.SunamoXlfKeys;

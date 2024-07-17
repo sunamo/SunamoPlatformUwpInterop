@@ -184,10 +184,13 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
 
     /// <summary>
     /// if is crypter, a1 start with !
+    /// 
+    /// Přejmenoval jsem ji na CreateAppFoldersIfDontExists - ta uměla jen vytvořit složky
+    /// nicméně název CreateAppFoldersIfDontExists byl v kódu využíván mnohem častěji
     /// </summary>
     /// <param name="keysCommonSettings"></param>
     /// <param name=""></param>
-    public void CreateAppDirsIfDontExists(CreateAppDirsIfDontExistsArgs a)
+    public void CreateAppFoldersIfDontExists(CreateAppDirsIfDontExistsArgs a)
     {
         RijndaelBytesEncrypt = a.RijndaelBytesEncrypt;
 
