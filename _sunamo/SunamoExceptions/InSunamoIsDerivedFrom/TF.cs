@@ -4,9 +4,9 @@ internal class TF
 {
     internal static string ReadAllTextSync(string path)
     {
-        return ReadAllTextSync(path, false);
+        return ReadAllTextSync(path, true);
     }
-    internal static string ReadAllTextSync(string path, bool createEmptyIfWasNotExists = false)
+    internal static string ReadAllTextSync(string path, bool createEmptyIfWasNotExists = true)
     {
         if (createEmptyIfWasNotExists)
             if (!File.Exists(path))
@@ -28,7 +28,7 @@ internal class TF
     {
         return ReadAllLinesSync(path, false);
     }
-    internal static List<string> ReadAllLinesSync(string path, bool createEmptyIfWasNotExists = false)
+    internal static List<string> ReadAllLinesSync(string path, bool createEmptyIfWasNotExists = true)
     {
         if (createEmptyIfWasNotExists)
             if (!File.Exists(path))
