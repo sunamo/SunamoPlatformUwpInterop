@@ -1,15 +1,18 @@
 namespace SunamoPlatformUwpInterop._public.SunamoEnums.Enums;
 
-
 public enum AppFolders
 {
     #region Not backuped
+
     Logs,
     Output,
     Cache,
     Temp,
+
     #endregion
+
     #region Backuped
+
     Input,
     Settings,
     Data,
@@ -20,5 +23,6 @@ public enum AppFolders
     Crypted,
     Reports,
     Backup
+
     #endregion
 }

@@ -13,12 +13,9 @@ internal class FS
         ThrowEx.IsNotWindowsPathFormat("nad", nad);
 
 
-        if (Directory.Exists(nad))
-        {
-            return;
-        }
+        if (Directory.Exists(nad)) return;
 
-        List<string> slozkyKVytvoreni = new List<string>
+        var slozkyKVytvoreni = new List<string>
         {
             nad
         };
@@ -28,23 +25,17 @@ internal class FS
             nad = Path.GetDirectoryName(nad);
 
             // TODO: Tady to nefunguje pro UWP/UAP apps protoze nemaji pristup k celemu disku. Zjistit co to je UWP/UAP/... a jak v nem ziskat/overit jakoukoliv slozku na disku
-            if (Directory.Exists(nad))
-            {
-                break;
-            }
+            if (Directory.Exists(nad)) break;
 
-            string kopia = nad;
+            var kopia = nad;
             slozkyKVytvoreni.Add(kopia);
         }
 
         slozkyKVytvoreni.Reverse();
-        foreach (string item in slozkyKVytvoreni)
+        foreach (var item in slozkyKVytvoreni)
         {
-            string folder = item;
-            if (!Directory.Exists(folder))
-            {
-                Directory.CreateDirectory(folder);
-            }
+            var folder = item;
+            if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
         }
     }
 
@@ -92,5 +83,4 @@ internal class FS
     //        string sb = nazevPP.Substring(1);
     //        return nazevPP[0].ToString().ToUpper() + sb;
     //    }
-
 }

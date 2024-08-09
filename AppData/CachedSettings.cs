@@ -2,25 +2,22 @@ namespace SunamoPlatformUwpInterop.AppData;
 
 public static class CachedSettings
 {
-    static Dictionary<CachedSettingsKeys, string> cs = new Dictionary<CachedSettingsKeys, string>();
+    private static readonly Dictionary<CachedSettingsKeys, string> cs = new();
 
     public static
 #if ASYNC
-    async Task<string>
+        async Task<string>
 #else
 string
 #endif
-    Get(CachedSettingsKeys k)
+        Get(CachedSettingsKeys k)
     {
         if (!cs.ContainsKey(k))
-        {
             cs.Add(k,
 #if ASYNC
-            await
+                await
 #endif
-            TF.ReadAllText(AppData.ci.GetFileCommonSettings(k.ToString())));
-        }
+                    TF.ReadAllText(AppData.ci.GetFileCommonSettings(k.ToString())));
         return cs[k];
     }
-
 }

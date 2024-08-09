@@ -35,7 +35,7 @@ public class SpecialFoldersHelper
     }
 
     /// <summary>
-    /// Return root folder of AppData (as C:\Users\n\AppData\)
+    ///     Return root folder of AppData (as C:\Users\n\AppData\)
     /// </summary>
     public static string ApplicationData()
     {

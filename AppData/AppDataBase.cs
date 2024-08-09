@@ -1,38 +1,49 @@
-
 namespace SunamoPlatformUwpInterop.AppData;
-using SunamoPlatformUwpInterop.Args;
 
 public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<StorageFolder, StorageFile>
 {
-    public string GetPathForSettingsFile(string key)
-    {
-        return AppData.ci.GetFile(AppFolders.Settings, key);
-    }
-
-    public string sunamoFolder { get; set; }
-    public abstract StorageFile GetFileInSubfolder(AppFolders output, string subfolder, string file, string ext);
-    public abstract StorageFolder GetFolder(AppFolders af);
-    /// <summary>
-    /// Must return always string, not StorageFile - in Standard is not StorageFile class and its impossible to get Path
-    /// </summary>
-    /// <param name="key"></param>
-    public abstract string GetFileCommonSettings(string key);
-    private string _fileFolderWithAppsFiles = "";
     public const string folderWithAppsFiles = "folderWithAppsFiles.txt";
 
-    /// <summary>
-    /// After startup will setted up in AppData/Roaming
-    /// Then from fileFolderWithAppsFiles App can load alternative path -
-    /// For all apps will be valid either AppData/Roaming or alternative path
-    /// </summary>
-    protected StorageFolder rootFolder = default(StorageFolder);
-    protected StorageFolder rootFolderPa = default(StorageFolder);
+    private static Type type = typeof(AppDataBase<StorageFolder, StorageFile>);
+
+    private static bool init;
+
+    //private string ReadFileOfSettingsOtherWorker(string path)
+    //    {
+    //        return null;
+    //        //           if (!path.Contains(AllStrings.bs) && !path.Contains(AllStrings.slash))
+    //        //           {
+    //        //               path = AppData.ci.GetFile(AppFolders.Settings, path);
+    //        //           }
+
+    //        //           TF.CreateEmptyFileWhenDoesntExists(path);
+    //        //           return
+
+    //        //File.ReadAllTextAsync(path);
+    //    }
+
+    public static Func<List<byte>, List<byte>> RijndaelBytesEncrypt;
+    private string _fileFolderWithAppsFiles = "";
+
+    public string basePath = null;
+
+    private readonly string FolderWithAppsFilesOrDefault = null;
+
+    public Dictionary<string, string> loadedCommonSettings;
+    public Dictionary<string, bool> loadedSettingsBool;
+    public Dictionary<string, List<string>> loadedSettingsList;
+    public Dictionary<string, string> loadedSettingsOther;
 
     /// <summary>
-    /// Must be here and Tash because in UWP is everything async
-    ///
+    ///     After startup will setted up in AppData/Roaming
+    ///     Then from fileFolderWithAppsFiles App can load alternative path -
+    ///     For all apps will be valid either AppData/Roaming or alternative path
     /// </summary>
-    public abstract StorageFolder GetSunamoFolder();
+    protected StorageFolder rootFolder;
+
+    protected StorageFolder rootFolderPa;
+
+    public string sunamoFolder { get; set; }
 
     //public  string CommonFolder()
     //{
@@ -43,7 +54,7 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
 
 
     /// <summary>
-    /// DOčasně ji zakomentuji, s apps stejně nepracuji
+    ///     DOčasně ji zakomentuji, s apps stejně nepracuji
     /// </summary>
     //public dynamic Abstract
     //{
@@ -77,39 +88,28 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
     //    }
     //}
 
-    AppDataAbstractBase<StorageFolder, StorageFile> AbstractNon =>
+    private AppDataAbstractBase<StorageFolder, StorageFile> AbstractNon =>
         (AppDataAbstractBase<StorageFolder, StorageFile>)this;
 
-
-    AppDataAppsAbstractBase<StorageFolder, StorageFile> AbstractNonApps()
-    {
-        return (AppDataAppsAbstractBase<StorageFolder, StorageFile>)this;
-    }
-
-    static Type type = typeof(AppDataBase<StorageFolder, StorageFile>);
-
     /// <summary>
-    /// Tato cesta je již s ThisApp.Name
-    /// Set používej s rozvahou a vždy se ujisti zda nenastavuješ na SE(null moc nevadí, v takovém případě RootFolder bude vracet složku v dokumentech)
+    ///     Tato cesta je již s ThisApp.Name
+    ///     Set používej s rozvahou a vždy se ujisti zda nenastavuješ na SE(null moc nevadí, v takovém případě RootFolder bude
+    ///     vracet složku v dokumentech)
     /// </summary>
     public StorageFolder RootFolder
     {
         get
         {
-            bool isNull = AbstractNon.IsRootFolderNull();
+            var isNull = AbstractNon.IsRootFolderNull();
             if (isNull)
-            {
-                throw new Exception("Slo\u017Eka ke soubor\u016Fm aplikace nebyla zad\u00E1na LookDirectIntoIsRootFolderNull.");
-            }
+                throw new Exception(
+                    "Slo\u017Eka ke soubor\u016Fm aplikace nebyla zad\u00E1na LookDirectIntoIsRootFolderNull.");
 
             return rootFolder;
         }
         set
         {
-            if (value != null && char.IsLower(value.ToString()[0]))
-            {
-                ThrowEx.FirstLetterIsNotUpper(value.ToString());
-            }
+            if (value != null && char.IsLower(value.ToString()[0])) ThrowEx.FirstLetterIsNotUpper(value.ToString());
             rootFolder = value;
         }
     }
@@ -118,21 +118,42 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
     {
         get
         {
-            bool isNull = AbstractNon.IsRootFolderNull();
+            var isNull = AbstractNon.IsRootFolderNull();
             if (isNull)
-            {
-                throw new Exception("Slo\u017Eka ke soubor\u016Fm aplikace nebyla zad\u00E1na. LookDirectIntoIsRootFolderNull");
-            }
+                throw new Exception(
+                    "Slo\u017Eka ke soubor\u016Fm aplikace nebyla zad\u00E1na. LookDirectIntoIsRootFolderNull");
 
             return rootFolderPa;
         }
-        set
-        {
-            rootFolderPa = value;
-        }
+        set => rootFolderPa = value;
     }
 
+    /// <summary>
+    ///     Must return always string, not StorageFile - in Standard is not StorageFile class and its impossible to get Path
+    /// </summary>
+    /// <param name="key"></param>
+    public abstract string GetFileCommonSettings(string key);
+
     public abstract string RootFolderCommon(bool inFolderCommon);
+
+    public string GetPathForSettingsFile(string key)
+    {
+        return AppData.ci.GetFile(AppFolders.Settings, key);
+    }
+
+    public abstract StorageFile GetFileInSubfolder(AppFolders output, string subfolder, string file, string ext);
+    public abstract StorageFolder GetFolder(AppFolders af);
+
+    /// <summary>
+    ///     Must be here and Tash because in UWP is everything async
+    /// </summary>
+    public abstract StorageFolder GetSunamoFolder();
+
+
+    private AppDataAppsAbstractBase<StorageFolder, StorageFile> AbstractNonApps()
+    {
+        return (AppDataAppsAbstractBase<StorageFolder, StorageFile>)this;
+    }
 
     public string GetFolderWithAppsFiles()
     {
@@ -140,55 +161,25 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
         var ad = SpecialFoldersHelper.AppDataRoaming();
 
 
-        string slozka = Path.Combine(ad, "sunamo\\Common", AppFolders.Settings.ToString());
+        var slozka = Path.Combine(ad, "sunamo\\Common", AppFolders.Settings.ToString());
         _fileFolderWithAppsFiles = Path.Combine(slozka, folderWithAppsFiles);
 
 
         FS.CreateUpfoldersPsysicallyUnlessThere(_fileFolderWithAppsFiles);
 
 
-
-
         return _fileFolderWithAppsFiles;
     }
-
-    public string basePath = null;
-
-    static bool init = false;
-
-    string FolderWithAppsFilesOrDefault = null;
 
     public string ReadFolderWithAppsFilesOrDefault(string s)
     {
         return FolderWithAppsFilesOrDefault;
     }
 
-    public Dictionary<string, string> loadedCommonSettings = null;
-    public Dictionary<string, List<string>> loadedSettingsList = null;
-    public Dictionary<string, bool> loadedSettingsBool = null;
-    public Dictionary<string, string> loadedSettingsOther = null;
-
-    //private string ReadFileOfSettingsOtherWorker(string path)
-    //    {
-    //        return null;
-    //        //           if (!path.Contains(AllStrings.bs) && !path.Contains(AllStrings.slash))
-    //        //           {
-    //        //               path = AppData.ci.GetFile(AppFolders.Settings, path);
-    //        //           }
-
-    //        //           TF.CreateEmptyFileWhenDoesntExists(path);
-    //        //           return
-
-    //        //File.ReadAllTextAsync(path);
-    //    }
-
-    public static Func<List<byte>, List<byte>> RijndaelBytesEncrypt;
-
     /// <summary>
-    /// if is crypter, a1 start with !
-    /// 
-    /// Přejmenoval jsem ji na CreateAppFoldersIfDontExists - ta uměla jen vytvořit složky
-    /// nicméně název CreateAppFoldersIfDontExists byl v kódu využíván mnohem častěji
+    ///     if is crypter, a1 start with !
+    ///     Přejmenoval jsem ji na CreateAppFoldersIfDontExists - ta uměla jen vytvořit složky
+    ///     nicméně název CreateAppFoldersIfDontExists byl v kódu využíván mnohem častěji
     /// </summary>
     /// <param name="keysCommonSettings"></param>
     /// <param name=""></param>
@@ -196,17 +187,15 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
     {
         RijndaelBytesEncrypt = a.RijndaelBytesEncrypt;
 
-        if (init)
-        {
-            ThrowEx.WasAlreadyInitialized();
-        }
+        if (init) ThrowEx.WasAlreadyInitialized();
 
         init = true;
 
         #region MyRegion
+
         /* potřebuji proměnnou s kterou nemám
-        * nevím jak moc se to využívalo, odkomentuji až budu vědět naprogramovat funkčnost podle nějakého příkladu
-        */
+         * nevím jak moc se to využívalo, odkomentuji až budu vědět naprogramovat funkčnost podle nějakého příkladu
+         */
         //var GetFolderWithAppsFilesOrDefault = (s) =>
         //{
         //    var content = File.ReadAllTextAsync(s);
@@ -218,41 +207,32 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
         //};
 
         //FolderWithAppsFilesOrDefault = GetFolderWithAppsFilesOrDefault();
+
         #endregion
 
 
-
-        if (string.IsNullOrEmpty(a.AppName))
-        {
-            throw new Exception("Nen\u00ED vypln\u011Bno n\u00E1zev aplikace.");
-        }
+        if (string.IsNullOrEmpty(a.AppName)) throw new Exception("Nen\u00ED vypln\u011Bno n\u00E1zev aplikace.");
 
         #region Prvně musím sunamoFolder, z ní jsem potom dále schopen odvodit root folder
-        string r = AppData.ci.GetFolderWithAppsFiles();
+
+        var r = AppData.ci.GetFolderWithAppsFiles();
         // Here I can't use TF.ReadAllText
         sunamoFolder = TF.ReadAllTextSync(r);
 
-        if (char.IsLower(sunamoFolder[0]))
-        {
-            ThrowEx.FirstLetterIsNotUpper(sunamoFolder);
-        }
+        if (char.IsLower(sunamoFolder[0])) ThrowEx.FirstLetterIsNotUpper(sunamoFolder);
 
         if (string.IsNullOrWhiteSpace(sunamoFolder))
-        {
-            sunamoFolder = Path.Combine(SpecialFoldersHelper.AppDataRoaming(), Consts.@sunamo);
-        }
+            sunamoFolder = Path.Combine(SpecialFoldersHelper.AppDataRoaming(), Consts.sunamo);
+
         #endregion
 
         #region Pak teprve můžu evaluovat rootfolder pro data aplikace
+
         if (this is AppDataAbstractBase<StorageFolder, StorageFile>)
-        {
             RootFolder =
                 ((AppDataAbstractBase<StorageFolder, StorageFile>)this).GetRootFolder(a.AppName);
-        }
         else if (this is AppDataAppsAbstractBase<StorageFolder, StorageFile>)
-        {
             RootFolder = ((AppDataAppsAbstractBase<StorageFolder, StorageFile>)this).GetRootFolder();
-        }
 
         /*
         Abstract je třída jež mi vrací správně přetypované
@@ -264,16 +244,18 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
 
         foreach (AppFolders item in Enum.GetValues(typeof(AppFolders)))
         {
-
             FS.CreateFoldersPsysicallyUnlessThere(GetFolder(item).ToString());
 
 
             Directory.CreateDirectory(AbstractNon.GetFolder(item).ToString());
         }
+
         #endregion
 
         #region A teprve na konci až když mám root folder můžu s ní sestavit cesty na základě předaných klíčů
+
         #region loadedCommonSettings
+
         loadedCommonSettings = new Dictionary<string, string>(a.keysCommonSettings.Count);
 
         foreach (var key in a.keysCommonSettings)
@@ -297,18 +279,20 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
                 loadedCommonSettings.Add(keyTrimmed, TF.ReadAllTextSync(file));
             }
         }
+
         #endregion
 
         #region loadedSettingsList
+
         loadedSettingsList = new Dictionary<string, List<string>>(a.keysSettingsList.Count);
 
         foreach (var item in a.keysSettingsList)
-        {
             loadedSettingsList.Add(item, TF.ReadAllLinesSync(GetPathForSettingsFile(item), true));
-        }
+
         #endregion
 
         #region loadedSettingsBool
+
         loadedSettingsBool = new Dictionary<string, bool>(a.keysSettingsBool.Count);
 
         foreach (var item in a.keysSettingsBool)
@@ -326,9 +310,11 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
 
             loadedSettingsBool.Add(item, bool.Parse(text));
         }
+
         #endregion
 
         #region loadedSettingsOther
+
         loadedSettingsOther = new Dictionary<string, string>(a.keysSettingsOther.Count);
 
         foreach (var item in a.keysSettingsOther)
@@ -336,7 +322,9 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
             var path = GetPathForSettingsFile(item);
             loadedSettingsOther.Add(item, TF.ReadAllTextSync(path, true));
         }
+
         #endregion
+
         #endregion
     }
 
@@ -344,46 +332,46 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
     {
         //ThrowEx.IsWindowsPathFormat(key, FS.IsWindowsPathFormat);
         if (!loadedSettingsOther.ContainsKey(key))
-        {
-            throw new Exception($"{key} was not found in dictionary, probably was not specified as deps in calling CreateAppFoldersIfDontExists");
-        }
+            throw new Exception(
+                $"{key} was not found in dictionary, probably was not specified as deps in calling CreateAppFoldersIfDontExists");
         return loadedSettingsOther[key];
     }
-    public AppDataBase()
-    {
-    }
+
     /// <summary>
-    /// Save file A1 to folder AF Settings with value A2.
+    ///     Save file A1 to folder AF Settings with value A2.
     /// </summary>
-    /// <param name = "file"></param>
-    /// <param name = "value"></param>
+    /// <param name="file"></param>
+    /// <param name="value"></param>
     public void SaveFileOfSettings(string file, string value)
     {
-        StorageFile fileToSave = AbstractNon.GetFile(AppFolders.Settings, file);
+        var fileToSave = AbstractNon.GetFile(AppFolders.Settings, file);
         AbstractNon.SaveFile(value, fileToSave);
     }
+
     /// <summary>
-    /// Save file A2 to AF A1 with contents A3
+    ///     Save file A2 to AF A1 with contents A3
     /// </summary>
-    /// <param name = "af"></param>
-    /// <param name = "file"></param>
-    /// <param name = "value"></param>
+    /// <param name="af"></param>
+    /// <param name="file"></param>
+    /// <param name="value"></param>
     public StorageFile SaveFile(AppFolders af, string file, string value)
     {
-        StorageFile fileToSave = AbstractNon.GetFile(af, file);
+        var fileToSave = AbstractNon.GetFile(af, file);
         SaveFile(value, fileToSave);
         return fileToSave;
     }
+
     private void SaveFile(string value, StorageFile fileToSave)
     {
         ThrowEx.NotImplementedMethod();
     }
+
     /// <summary>
-    /// Append to file A2 in AF A1 with contents A3
+    ///     Append to file A2 in AF A1 with contents A3
     /// </summary>
-    /// <param name = "af"></param>
-    /// <param name = "file"></param>
-    /// <param name = "value"></param>
+    /// <param name="af"></param>
+    /// <param name="file"></param>
+    /// <param name="value"></param>
     public
 #if ASYNC
         async Task
@@ -398,11 +386,12 @@ void
 #endif
             AppendAllText(fileToSave.ToString(), value);
     }
+
     /// <summary>
-    /// Just call TF.AppendAllText
+    ///     Just call TF.AppendAllText
     /// </summary>
-    /// <param name = "file"></param>
-    /// <param name = "value"></param>
+    /// <param name="file"></param>
+    /// <param name="value"></param>
     public
 #if ASYNC
         async Task
@@ -418,20 +407,21 @@ void
     }
 
     /// <summary>
-    /// If file A1 dont exists, then create him with empty content and G . When optained file/folder doesnt exists, return SE
+    ///     If file A1 dont exists, then create him with empty content and G . When optained file/folder doesnt exists, return
+    ///     SE
     /// </summary>
-    /// <param name = "key"></param>
+    /// <param name="key"></param>
     public string ReadFileOfSettingsExistingDirectoryOrFile(string key)
     {
-        return ReadFileOfSettingsWorker<string>(loadedSettingsOther, key);
+        return ReadFileOfSettingsWorker(loadedSettingsOther, key);
     }
 
     /// <summary>
-    /// If file A1 dont exists or have empty content, then create him with empty content and G false
+    ///     If file A1 dont exists or have empty content, then create him with empty content and G false
     /// </summary>
-    /// <param name = "path"></param>
+    /// <param name="path"></param>
     public bool ReadFileOfSettingsBool(string key)
     {
-        return ReadFileOfSettingsWorker<bool>(loadedSettingsBool, key);
+        return ReadFileOfSettingsWorker(loadedSettingsBool, key);
     }
 }

@@ -5,9 +5,10 @@ public abstract class AppDataAbstractBase<StorageFolder, StorageFile> : AppDataB
     public abstract StorageFolder GetRootFolder(string ThisAppName);
 
     /// <summary>
-    /// If file A1 dont exists, then create him with empty content and G . When optained file/folder doesnt exists, return it anyway
+    ///     If file A1 dont exists, then create him with empty content and G . When optained file/folder doesnt exists, return
+    ///     it anyway
     /// </summary>
-    /// <param name = "path"></param>
+    /// <param name="path"></param>
     public string ReadFileOfSettingsDirectoryOrFile(string key)
     {
         return ReadFileOfSettingsWorker(loadedSettingsOther, key);
@@ -17,30 +18,30 @@ public abstract class AppDataAbstractBase<StorageFolder, StorageFile> : AppDataB
 #if ASYNC
         Task
 #else
-void  
+void
 #endif
         SaveFile(string content, StorageFile sf);
 
     /// <summary>
-    /// If file A1 dont exists or have empty content, then create him with empty content and G SE
+    ///     If file A1 dont exists or have empty content, then create him with empty content and G SE
     /// </summary>
-    /// <param name = "path"></param>
+    /// <param name="path"></param>
     public string ReadFileOfSettingsOther(string path)
     {
         return loadedSettingsOther[path];
     }
 
 
-
     /// <summary>
-    /// Pokud rootFolder bude SE nebo null, G false, jinak vr�t� zda rootFolder existuej ve FS
+    ///     Pokud rootFolder bude SE nebo null, G false, jinak vr�t� zda rootFolder existuej ve FS
     /// </summary>
     public abstract bool IsRootFolderOk();
-    public abstract new
+
+    public new abstract
 #if ASYNC
         Task
 #else
-void  
+void
 #endif
         AppendAllText(AppFolders af, string file, string value);
 
@@ -48,21 +49,22 @@ void
 #if ASYNC
         Task
 #else
-void  
+void
 #endif
         AppendAllText(string value, StorageFile file);
 
     /// <summary>
-    /// G path file A2 in AF A1.
-    /// Automatically create upfolder if there dont exists.
+    ///     G path file A2 in AF A1.
+    ///     Automatically create upfolder if there dont exists.
     /// </summary>
-    /// <param name = "af"></param>
-    /// <param name = "file"></param>
+    /// <param name="af"></param>
+    /// <param name="file"></param>
     public abstract StorageFile GetFile(AppFolders af, string file);
 
     public abstract StorageFile GetFileString(string af, string file, bool pa = false);
 
     public abstract bool IsRootFolderNull();
+
     //public abstract StorageFolder GetSunamoFolder();
     public abstract StorageFolder GetCommonSettings(string key, bool isCrypted = true);
 

@@ -1,4 +1,3 @@
-
 namespace SunamoPlatformUwpInterop._sunamo;
 //namespace SunamoPlatformUwpInterop._sunamo;
 //internal class TF
@@ -32,6 +31,5 @@ namespace SunamoPlatformUwpInterop._sunamo;
 //    {
 //        return File.ReadAllLines(p).ToList();
 //    }
-
 
 //}
