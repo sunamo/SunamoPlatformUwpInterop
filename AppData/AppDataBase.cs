@@ -216,8 +216,8 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
         #region Prvně musím sunamoFolder, z ní jsem potom dále schopen odvodit root folder
 
         var r = AppData.ci.GetFolderWithAppsFiles();
-        // Here I can't use TF.ReadAllText
-        sunamoFolder = TF.ReadAllTextSync(r);
+        // Here I can't use File.ReadAllText
+        sunamoFolder = File.ReadAllText(r);
 
         if (char.IsLower(sunamoFolder[0])) ThrowEx.FirstLetterIsNotUpper(sunamoFolder);
 
@@ -265,7 +265,7 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
 
             if (key.StartsWith("!"))
             {
-                var b = TF.ReadAllBytesSync(file);
+                var b = File.ReadAllBytes(file).ToList();
                 var b2 = a.RijndaelBytesDecrypt(b);
                 var b3 = b2.ToArray();
                 var vr = Encoding.UTF8.GetString(b3);
@@ -276,7 +276,7 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
             else
             {
                 // Must be File
-                loadedCommonSettings.Add(keyTrimmed, TF.ReadAllTextSync(file));
+                loadedCommonSettings.Add(keyTrimmed, File.ReadAllText(file));
             }
         }
 
@@ -287,7 +287,7 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
         loadedSettingsList = new Dictionary<string, List<string>>(a.keysSettingsList.Count);
 
         foreach (var item in a.keysSettingsList)
-            loadedSettingsList.Add(item, TF.ReadAllLinesSync(GetPathForSettingsFile(item), true));
+            loadedSettingsList.Add(item, File.ReadAllLines(GetPathForSettingsFile(item)).ToList());
 
         #endregion
 
@@ -298,7 +298,7 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
         foreach (var item in a.keysSettingsBool)
         {
             var path = GetPathForSettingsFile(item);
-            var text = TF.ReadAllTextSync(path);
+            var text = File.ReadAllText(path);
             bool.TryParse(text, out var isBool);
 
             if (!isBool)
@@ -320,7 +320,7 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
         foreach (var item in a.keysSettingsOther)
         {
             var path = GetPathForSettingsFile(item);
-            loadedSettingsOther.Add(item, TF.ReadAllTextSync(path, true));
+            loadedSettingsOther.Add(item, File.ReadAllText(path));
         }
 
         #endregion
@@ -403,7 +403,7 @@ void
 #if ASYNC
         await
 #endif
-            TF.AppendAllText(file, value);
+            File.AppendAllTextAsync(file, value);
     }
 
     /// <summary>

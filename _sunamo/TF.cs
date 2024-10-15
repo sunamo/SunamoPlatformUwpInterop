@@ -1,4 +1,4 @@
-namespace SunamoPlatformUwpInterop._sunamo;
+//namespace SunamoPlatformUwpInterop._sunamo;
 //namespace SunamoPlatformUwpInterop._sunamo;
 //internal class TF
 //{
@@ -12,14 +12,14 @@ namespace SunamoPlatformUwpInterop._sunamo;
 //        return File.ReadAllBytes(p).ToList();
 //    }
 
-//    internal static List<string> ReadAllLinesSync(string p)
+//    internal static List<string> ReadAllLines(string p)
 //    {
 //        return File.ReadAllLines(p).ToList();
 //    }
 
 //    internal static void WriteAllTextSync(string p, List<string> c)
 //    {
-//        return File.ReadAllText(p);
+//        return File.WriteAllText(p);
 //    }
 
 //    internal static List<byte> WriteAllBytesSync(string p, List<byte> c)

@@ -51,7 +51,7 @@ public partial class AppData : AppDataAbstractBase<string, string>
     public override string GetSunamoFolder()
     {
         var r = ci.GetFolderWithAppsFiles();
-        // Here I can't use TF.ReadFile
+        // Here I can't use File.ReadFile
         var sunamoFolder = File.ReadAllText(r);
 
         if (char.IsLower(sunamoFolder[0])) ThrowEx.FirstLetterIsNotUpper(sunamoFolder);
@@ -157,7 +157,7 @@ void
 #if ASYNC
         await
 #endif
-            TF.AppendAllText(sf, content);
+            File.AppendAllTextAsync(sf, content);
     }
 
     public string GetRootFolderForApp(string rootFolderFromCreatedAppData, string app)
@@ -194,7 +194,7 @@ void
 #if ASYNC
         await
 #endif
-            TF.WriteAllText(sf, content);
+            File.WriteAllTextAsync(sf, content);
     }
 
     public override
@@ -224,6 +224,6 @@ void
     public override void SetCommonSettings(string key, string value)
     {
         var file = GetFileCommonSettings(key);
-        TF.WriteAllBytes(file, RijndaelBytesEncrypt(Encoding.UTF8.GetBytes(value).ToList()));
+        File.WriteAllBytes(file, RijndaelBytesEncrypt(Encoding.UTF8.GetBytes(value).ToList()).ToArray());
     }
 }
