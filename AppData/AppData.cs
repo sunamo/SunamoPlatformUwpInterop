@@ -13,12 +13,12 @@ public partial class AppData : AppDataAbstractBase<string, string>
     //{
     //    if (string.IsNullOrEmpty(basePath))
     //        return basePath;
-    //    var p = .Split(basePath, AllChars.bs);
+    //    var p = .Split(basePath, '\\');
     //    var l = p[p.Count - 1];
-    //    //var lbs = l[l.Length - 1] == AllChars.bs;
+    //    //var lbs = l[l.Length - 1] == '\\';
     //    if (l.Contains("."))
     //    {
-    //        l = .RemoveAfterLast(AllChars.dot, l);
+    //        l = .RemoveAfterLast('.', l);
     //        p[p.Count - 1] = l;
     //    }
 
@@ -57,7 +57,7 @@ public partial class AppData : AppDataAbstractBase<string, string>
         if (char.IsLower(sunamoFolder[0])) ThrowEx.FirstLetterIsNotUpper(sunamoFolder);
 
         if (string.IsNullOrWhiteSpace(sunamoFolder))
-            sunamoFolder = Path.Combine(SpecialFoldersHelper.AppDataRoaming(), Consts.sunamo);
+            sunamoFolder = Path.Combine(SpecialFoldersHelper.AppDataRoaming(), "sunamo");
         return sunamoFolder;
     }
 
@@ -73,7 +73,7 @@ public partial class AppData : AppDataAbstractBase<string, string>
     public override string RootFolderCommon(bool inFolderCommon)
     {
         //string appDataFolder = SpecialFO
-        var sunamo2 = Path.Combine(SpecialFoldersHelper.AppDataRoaming(), Consts.sunamo);
+        var sunamo2 = Path.Combine(SpecialFoldersHelper.AppDataRoaming(), "sunamo");
         var redirect = GetSunamoFolder();
         if (!string.IsNullOrEmpty(redirect)) sunamo2 = redirect;
         if (inFolderCommon) return Path.Combine(sunamo2, "Common");
@@ -168,10 +168,10 @@ void
     public override string GetRootFolder(string ThisAppName)
     {
         rootFolder = GetSunamoFolder();
-        //pa ? SHParts.RemoveAfterFirst(ThisApp.Name, AllChars.dot) :
+        //pa ? SHParts.RemoveAfterFirst(ThisApp.Name, '.') :
         RootFolder = Path.Combine(rootFolder, ThisAppName);
         RootFolderPa = Path.Combine(Path.GetDirectoryName(rootFolder),
-            SHParts.RemoveAfterFirst(ThisAppName, AllStrings.dot));
+            SHParts.RemoveAfterFirst(ThisAppName, "."));
         Directory.CreateDirectory(RootFolder);
         Directory.CreateDirectory(RootFolderPa);
         return RootFolder;

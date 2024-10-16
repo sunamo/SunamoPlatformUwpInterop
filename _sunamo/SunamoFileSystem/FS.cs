@@ -61,7 +61,7 @@ internal class FS
     //    {
     //        if (v != string.Empty)
     //        {
-    //            v = v.TrimEnd(AllChars.bs) + AllChars.bs;
+    //            v = v.TrimEnd('\\') + '\\';
     //        }
 
     //        FirstCharUpper(ref v);

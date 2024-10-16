@@ -8,7 +8,7 @@ global using System.Collections;
 global using SunamoPlatformUwpInterop.AppData;
 global using SunamoPlatformUwpInterop.Interfaces;
 global using SunamoPlatformUwpInterop._sunamo.SunamoStringParts;
-global using SunamoPlatformUwpInterop._sunamo.SunamoValues;
+global using SunamoPlatformUwpInterop;
 global using SunamoPlatformUwpInterop._public.SunamoEnums.Enums;
 global using SunamoPlatformUwpInterop._sunamo.SunamoExceptions;
 global using System.Diagnostics;

@@ -11,7 +11,7 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
     //private string ReadFileOfSettingsOtherWorker(string path)
     //    {
     //        return null;
-    //        //           if (!path.Contains(AllStrings.bs) && !path.Contains(AllStrings.slash))
+    //        //           if (!path.Contains("\"") && !path.Contains("/"))
     //        //           {
     //        //               path = AppData.ci.GetFile(AppFolders.Settings, path);
     //        //           }
@@ -222,7 +222,7 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
         if (char.IsLower(sunamoFolder[0])) ThrowEx.FirstLetterIsNotUpper(sunamoFolder);
 
         if (string.IsNullOrWhiteSpace(sunamoFolder))
-            sunamoFolder = Path.Combine(SpecialFoldersHelper.AppDataRoaming(), Consts.sunamo);
+            sunamoFolder = Path.Combine(SpecialFoldersHelper.AppDataRoaming(), "sunamo");
 
         #endregion
 
