@@ -17,3 +17,5 @@ global using System.Reflection;
 global using System.Net;
 global using SunamoPlatformUwpInterop.PlatformUwpInterop;
 global using System.Diagnostics.CodeAnalysis;
+global using SunamoPlatformUwpInterop;
+global using SunamoPlatformUwpInterop._sunamo;
