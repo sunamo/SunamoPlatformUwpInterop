@@ -11,6 +11,7 @@ public class CreateAppFoldersIfDontExistsArgs
 
     public List<string> keysSettingsList = new();
     public List<string> keysSettingsOther = new();
+    public List<string> keysSettingsDateTime = new();
     public Func<List<byte>, List<byte>> RijndaelBytesDecrypt;
     public Func<List<byte>, List<byte>> RijndaelBytesEncrypt;
 }

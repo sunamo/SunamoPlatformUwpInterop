@@ -33,6 +33,7 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
     public Dictionary<string, bool> loadedSettingsBool;
     public Dictionary<string, List<string>> loadedSettingsList;
     public Dictionary<string, string> loadedSettingsOther;
+    public Dictionary<string, DateTime> loadedSettingsDateTime;
 
     /// <summary>
     ///     After startup will setted up in AppData/Roaming
@@ -138,7 +139,7 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
 
     public string GetPathForSettingsFile(string key)
     {
-        return AppData.ci.GetFile(AppFolders.Settings, key);
+        return AppData.ci.GetFile(AppFolders.Settings, key + ".txt");
     }
 
     public abstract StorageFile GetFileInSubfolder(AppFolders output, string subfolder, string file, string ext);
@@ -183,7 +184,7 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
     /// </summary>
     /// <param name="keysCommonSettings"></param>
     /// <param name=""></param>
-    public void CreateAppFoldersIfDontExists(CreateAppFoldersIfDontExistsArgs a)
+    public async void CreateAppFoldersIfDontExists(CreateAppFoldersIfDontExistsArgs a)
     {
         RijndaelBytesEncrypt = a.RijndaelBytesEncrypt;
 
@@ -246,7 +247,6 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
         {
             FS.CreateFoldersPsysicallyUnlessThere(GetFolder(item).ToString());
 
-
             Directory.CreateDirectory(AbstractNon.GetFolder(item).ToString());
         }
 
@@ -287,7 +287,19 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
         loadedSettingsList = new Dictionary<string, List<string>>(a.keysSettingsList.Count);
 
         foreach (var item in a.keysSettingsList)
-            loadedSettingsList.Add(item, File.ReadAllLines(GetPathForSettingsFile(item)).ToList());
+        {
+            var path = GetPathForSettingsFile(item);
+            if (File.Exists(path))
+            {
+                loadedSettingsList.Add(item, File.ReadAllLines(path).ToList());
+            }
+            else
+            {
+                KeyDontExistsOnDrive(nameof(loadedSettingsList), item);
+                File.WriteAllText(path, "");
+                loadedSettingsList.Add(item, []);
+            }
+        }
 
         #endregion
 
@@ -298,11 +310,17 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
         foreach (var item in a.keysSettingsBool)
         {
             var path = GetPathForSettingsFile(item);
-            var text = File.ReadAllText(path);
+            string text = "";
+            if (File.Exists(path))
+            {
+                text = File.ReadAllText(path);
+            }
+
             bool.TryParse(text, out var isBool);
 
             if (!isBool)
             {
+                KeyDontExistsOnDrive(nameof(loadedSettingsBool), item);
                 //ThisApp.Warning($"In ${path} was not boolean value, was written default false");
                 File.WriteAllText(path, bool.FalseString);
                 text = bool.FalseString;
@@ -320,12 +338,57 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
         foreach (var item in a.keysSettingsOther)
         {
             var path = GetPathForSettingsFile(item);
-            loadedSettingsOther.Add(item, File.ReadAllText(path));
+            if (File.Exists(path))
+            {
+                loadedSettingsOther.Add(item, File.ReadAllText(path));
+            }
+            else
+            {
+                File.WriteAllText(path, "");
+                KeyDontExistsOnDrive(nameof(loadedSettingsOther), item);
+                loadedSettingsOther.Add(item, "");
+            }
+        }
+
+        #endregion
+
+        #region loadedSettingsDateTime
+
+        loadedSettingsDateTime = new(a.keysSettingsDateTime.Count);
+
+        foreach (var item in a.keysSettingsDateTime)
+        {
+            var path = GetPathForSettingsFile(item);
+            var content = "";
+            if (File.Exists(path))
+            {
+                content = File.ReadAllText(path);
+            }
+
+
+            if (DateTime.TryParse(content, out var dt))
+            {
+                loadedSettingsDateTime.Add(item, dt);
+            }
+            else
+            {
+                File.WriteAllText(path, default);
+                KeyDontExistsOnDrive(nameof(loadedSettingsDateTime), item);
+                loadedSettingsDateTime.Add(item, default);
+            }
+
         }
 
         #endregion
 
         #endregion
+    }
+
+    private void KeyDontExistsOnDrive(string variableName, string key)
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine($"{key} of {variableName} not exists on drive, was saved with default value");
+        Console.ResetColor();
     }
 
     public T ReadFileOfSettingsWorker<T>(IDictionary<string, T> loadedSettingsOther, string key)
@@ -342,10 +405,26 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
     /// </summary>
     /// <param name="file"></param>
     /// <param name="value"></param>
-    public void SaveFileOfSettings(string file, string value)
+    public async Task SaveFileOfSettings(string file, string value)
     {
-        var fileToSave = AbstractNon.GetFile(AppFolders.Settings, file);
-        AbstractNon.SaveFile(value, fileToSave);
+        var fileToSave = AbstractNon.GetFile(AppFolders.Settings, file + ".txt");
+        await AbstractNon.SaveFile(fileToSave, value);
+
+    }
+
+    public async Task SaveFileOfSettingsDateTime(string key, DateTime dt)
+    {
+        await File.WriteAllTextAsync(AppData.ci.GetFile(AppFolders.Settings, key + ".txt"), dt.ToString());
+    }
+
+    public async Task SaveFileOfSettingsBool(string key, bool b)
+    {
+        await File.WriteAllTextAsync(AppData.ci.GetFile(AppFolders.Settings, key + ".txt"), b.ToString());
+    }
+
+    public async Task SaveFileOfSettingsList(string key, IEnumerable<string> l)
+    {
+        await File.WriteAllLinesAsync(AppData.ci.GetFile(AppFolders.Settings, key + ".txt"), l);
     }
 
     /// <summary>
@@ -354,16 +433,16 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
     /// <param name="af"></param>
     /// <param name="file"></param>
     /// <param name="value"></param>
-    public StorageFile SaveFile(AppFolders af, string file, string value)
+    public async Task<StorageFile> SaveFile(AppFolders af, string file, string value)
     {
         var fileToSave = AbstractNon.GetFile(af, file);
-        SaveFile(value, fileToSave);
+        await SaveFile(fileToSave, value);
         return fileToSave;
     }
 
-    private void SaveFile(string value, StorageFile fileToSave)
+    private async Task SaveFile(StorageFile fileToSave, string value)
     {
-        ThrowEx.NotImplementedMethod();
+        await File.WriteAllTextAsync(fileToSave.ToString(), value);
     }
 
     /// <summary>
@@ -416,6 +495,8 @@ void
         return ReadFileOfSettingsWorker(loadedSettingsOther, key);
     }
 
+
+
     /// <summary>
     ///     If file A1 dont exists or have empty content, then create him with empty content and G false
     /// </summary>
@@ -423,5 +504,10 @@ void
     public bool ReadFileOfSettingsBool(string key)
     {
         return ReadFileOfSettingsWorker(loadedSettingsBool, key);
+    }
+
+    public DateTime ReadFileOfSettingsDateTime(string key)
+    {
+        return ReadFileOfSettingsWorker(loadedSettingsDateTime, key);
     }
 }

@@ -25,10 +25,10 @@ void
     /// <summary>
     ///     If file A1 dont exists or have empty content, then create him with empty content and G SE
     /// </summary>
-    /// <param name="path"></param>
-    public string ReadFileOfSettingsOther(string path)
+    /// <param name="key"></param>
+    public string ReadFileOfSettingsOther(string key)
     {
-        return loadedSettingsOther[path];
+        return loadedSettingsOther[key];
     }
 
 
