@@ -49,7 +49,7 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
     //public  string CommonFolder()
     //{
     //    var path = GetSunamoFolder().Result.ToString();
-    //    return Path.Combine(path, sess.i18n(XlfKeys.Common), AppFolders.Settings.ToString());
+    //    return Path.Combine(path, Translate.FromKey(XlfKeys.Common), AppFolders.Settings.ToString());
     //}
     //public abstract StorageFolder CommonFolder();
 
