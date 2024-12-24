@@ -15,12 +15,6 @@
     <PackageReleaseNotes>Fixed saving and loading app data</PackageReleaseNotes>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>$(DefineConstants);ASYNC</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DefineConstants>$(DefineConstants);ASYNC</DefineConstants>
-  </PropertyGroup>
   <ItemGroup>
     <None Include="readme.md" Pack="True" PackagePath="." />
   </ItemGroup>
@@ -29,4 +23,12 @@
     <Folder Include="_sunamo\SunamoExceptions\Delegates\" />
     <Folder Include="_sunamo\SunamoInterfaces\Interfaces\" />
   </ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>$(DefineConstants);ASYNC</DefineConstants>
+    <NoWarn>CA1822</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>$(DefineConstants);ASYNC</DefineConstants>
+    <NoWarn>CA1822</NoWarn>
+  </PropertyGroup>
 </Project>
