@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-internal class AppDataMethods
+public class AppDataMethods
 {
     public static string GetFileData(string fn)
     {
