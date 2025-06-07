@@ -172,7 +172,7 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
         return _fileFolderWithAppsFiles;
     }
 
-    public string ReadFolderWithAppsFilesOrDefault(string s)
+    public string ReadFolderWithAppsFilesOrDefault(/*string s*/)
     {
         return FolderWithAppsFilesOrDefault;
     }
