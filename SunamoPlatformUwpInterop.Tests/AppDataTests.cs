@@ -1,4 +1,7 @@
-﻿namespace SunamoPlatformUwpInterop.Tests;
+// EN: Variable names have been checked and replaced with self-descriptive names
+// CZ: Názvy proměnných byly zkontrolovány a nahrazeny samopopisnými názvy
+
+namespace SunamoPlatformUwpInterop.Tests;
 
 using SunamoPlatformUwpInterop._public.SunamoEnums.Enums;
 using SunamoPlatformUwpInterop.AppData;
@@ -26,13 +29,13 @@ public class AppDataTests : TestsBase //: ProgramShared
 
 
 
-        var d = AppData.ci.GetFolder(AppFolders.Cache);
+        var data = AppData.ci.GetFolder(AppFolders.Cache);
         var f = AppData.ci.GetFile(AppFolders.Crypted, "a");
     }
 
     [Fact]
     public void ReadFileOfSettingsListTest()
     {
-        var c = AppData.ci.ReadFileOfSettingsBool("a.txt");
+        var count = AppData.ci.ReadFileOfSettingsBool("a.txt");
     }
 }

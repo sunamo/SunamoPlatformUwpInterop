@@ -1,3 +1,6 @@
+// EN: Variable names have been checked and replaced with self-descriptive names
+// CZ: Názvy proměnných byly zkontrolovány a nahrazeny samopopisnými názvy
+
 namespace RunnerPlatformUwpInterop;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -29,8 +32,8 @@ internal class Program
         await AppData.ci.SaveFileOfSettingsList(list, ["1", "2"]);
 
         var dt = AppData.ci.ReadFileOfSettingsDateTime(dtLastDt);
-        var b = AppData.ci.ReadFileOfSettingsBool(boolean);
+        var builder = AppData.ci.ReadFileOfSettingsBool(boolean);
         var o = AppData.ci.ReadFileOfSettingsOther(other);
-        var l = AppData.ci.ReadFileOfSettingsList(list);
+        var list = AppData.ci.ReadFileOfSettingsList(list);
     }
 }

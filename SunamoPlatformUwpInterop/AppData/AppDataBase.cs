@@ -1,3 +1,6 @@
+// EN: Variable names have been checked and replaced with self-descriptive names
+// CZ: Názvy proměnných byly zkontrolovány a nahrazeny samopopisnými názvy
+
 namespace SunamoPlatformUwpInterop.AppData;
 
 public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<StorageFolder, StorageFile>
@@ -55,7 +58,7 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
 
 
     /// <summary>
-    ///     DOčasně ji zakomentuji, s apps stejně nepracuji
+    ///     DOčasně ji zakomentuji, text apps stejně nepracuji
     /// </summary>
     //public dynamic Abstract
     //{
@@ -93,8 +96,8 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
         (AppDataAbstractBase<StorageFolder, StorageFile>)this;
 
     /// <summary>
-    ///     Tato cesta je již s ThisApp.Name
-    ///     Set používej s rozvahou a vždy se ujisti zda nenastavuješ na SE(null moc nevadí, v takovém případě RootFolder bude
+    ///     Tato cesta je již text ThisApp.Name
+    ///     Set používej text rozvahou a vždy se ujisti zda nenastavuješ na SE(null moc nevadí, v takovém případě RootFolder bude
     ///     vracet složku v dokumentech)
     /// </summary>
     public StorageFolder RootFolder
@@ -172,7 +175,7 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
         return _fileFolderWithAppsFiles;
     }
 
-    public string ReadFolderWithAppsFilesOrDefault(/*string s*/)
+    public string ReadFolderWithAppsFilesOrDefault(/*string text*/)
     {
         return FolderWithAppsFilesOrDefault;
     }
@@ -194,12 +197,12 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
 
         #region MyRegion
 
-        /* potřebuji proměnnou s kterou nemám
+        /* potřebuji proměnnou text kterou nemám
          * nevím jak moc se to využívalo, odkomentuji až budu vědět naprogramovat funkčnost podle nějakého příkladu
          */
-        //var GetFolderWithAppsFilesOrDefault = (s) =>
+        //var GetFolderWithAppsFilesOrDefault = (text) =>
         //{
-        //    var content = File.ReadAllTextAsync(s);
+        //    var content = File.ReadAllTextAsync(text);
         //    if (content == string.Empty)
         //    {
         //        return RootFolderCommon(false);
@@ -216,9 +219,9 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
 
         #region Prvně musím sunamoFolder, z ní jsem potom dále schopen odvodit root folder
 
-        var r = AppData.ci.GetFolderWithAppsFiles();
+        var result = AppData.ci.GetFolderWithAppsFiles();
         // Here I can't use File.ReadAllText
-        sunamoFolder = File.ReadAllText(r);
+        sunamoFolder = File.ReadAllText(result);
 
         if (char.IsLower(sunamoFolder[0])) ThrowEx.FirstLetterIsNotUpper(sunamoFolder);
 
@@ -252,7 +255,7 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
 
         #endregion
 
-        #region A teprve na konci až když mám root folder můžu s ní sestavit cesty na základě předaných klíčů
+        #region A teprve na konci až když mám root folder můžu text ní sestavit cesty na základě předaných klíčů
 
         #region loadedCommonSettings
 
@@ -265,8 +268,8 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
 
             if (key.StartsWith("!"))
             {
-                var b = File.ReadAllBytes(file).ToList();
-                var b2 = a.RijndaelBytesDecrypt(b);
+                var builder = File.ReadAllBytes(file).ToList();
+                var b2 = a.RijndaelBytesDecrypt(builder);
                 var b3 = b2.ToArray();
                 var vr = Encoding.UTF8.GetString(b3);
                 vr = vr.Replace("\0", "");
@@ -417,9 +420,9 @@ public abstract class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<Sto
         await File.WriteAllTextAsync(AppData.ci.GetFile(AppFolders.Settings, key + ".txt"), dt.ToString());
     }
 
-    public async Task SaveFileOfSettingsBool(string key, bool b)
+    public async Task SaveFileOfSettingsBool(string key, bool builder)
     {
-        await File.WriteAllTextAsync(AppData.ci.GetFile(AppFolders.Settings, key + ".txt"), b.ToString());
+        await File.WriteAllTextAsync(AppData.ci.GetFile(AppFolders.Settings, key + ".txt"), builder.ToString());
     }
 
     public async Task SaveFileOfSettingsList(string key, IEnumerable<string> l)

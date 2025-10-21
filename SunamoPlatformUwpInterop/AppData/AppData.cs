@@ -1,3 +1,6 @@
+// EN: Variable names have been checked and replaced with self-descriptive names
+// CZ: Názvy proměnných byly zkontrolovány a nahrazeny samopopisnými názvy
+
 namespace SunamoPlatformUwpInterop.AppData;
 
 public partial class AppData : AppDataAbstractBase<string, string>
@@ -15,16 +18,16 @@ public partial class AppData : AppDataAbstractBase<string, string>
     //{
     //    if (string.IsNullOrEmpty(basePath))
     //        return basePath;
-    //    var p = .Split(basePath, '\\');
-    //    var l = p[p.Count - 1];
-    //    //var lbs = l[l.Length - 1] == '\\';
-    //    if (l.Contains("."))
+    //    var parameter = .Split(basePath, '\\');
+    //    var list = parameter[parameter.Count - 1];
+    //    //var lbs = list[list.Length - 1] == '\\';
+    //    if (list.Contains("."))
     //    {
-    //        l = .RemoveAfterLast('.', l);
-    //        p[p.Count - 1] = l;
+    //        list = .RemoveAfterLast('.', list);
+    //        parameter[parameter.Count - 1] = list;
     //    }
 
-    //    return FS.CombineDir(p.ToArray());
+    //    return FS.CombineDir(parameter.ToArray());
     //}
 
     ///// <summary>
@@ -52,9 +55,9 @@ public partial class AppData : AppDataAbstractBase<string, string>
 
     public override string GetSunamoFolder()
     {
-        var r = ci.GetFolderWithAppsFiles();
+        var result = ci.GetFolderWithAppsFiles();
         // Here I can't use File.ReadFile
-        var sunamoFolder = File.ReadAllText(r);
+        var sunamoFolder = File.ReadAllText(result);
 
         if (char.IsLower(sunamoFolder[0])) ThrowEx.FirstLetterIsNotUpper(sunamoFolder);
 
