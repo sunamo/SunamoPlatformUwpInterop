@@ -34,6 +34,6 @@ internal class Program
         var dt = AppData.ci.ReadFileOfSettingsDateTime(dtLastDt);
         var builder = AppData.ci.ReadFileOfSettingsBool(boolean);
         var o = AppData.ci.ReadFileOfSettingsOther(other);
-        var list = AppData.ci.ReadFileOfSettingsList(list);
+        var listResult = AppData.ci.ReadFileOfSettingsList(list);
     }
 }
