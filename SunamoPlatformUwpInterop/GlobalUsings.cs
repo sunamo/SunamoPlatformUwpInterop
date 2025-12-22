@@ -1,5 +1,3 @@
-// EN: Variable names have been checked and replaced with self-descriptive names
-// CZ: Názvy proměnných byly zkontrolovány a nahrazeny samopopisnými názvy
 global using System.Collections.Generic;
 global using System;
 global using System.Linq;
@@ -17,7 +15,6 @@ global using SunamoPlatformUwpInterop._sunamo.SunamoFileSystem;
 global using SunamoPlatformUwpInterop.Args;
 global using System.Reflection;
 global using System.Net;
-//global using SunamoPlatformUwpInterop.PlatformUwpInterop;
 global using System.Diagnostics.CodeAnalysis;
 global using SunamoPlatformUwpInterop;
 global using SunamoPlatformUwpInterop._sunamo;
