@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="SunamoPlatformUwpInterop.Tests\\SunamoPlatformUwpInterop.Tests.csproj" />
+  <Project Path="RunnerPlatformUwpInterop\\RunnerPlatformUwpInterop.csproj" />
+  <Project Path="SunamoPlatformUwpInterop\SunamoPlatformUwpInterop.csproj" />
+</Solution>
