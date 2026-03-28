@@ -10,6 +10,7 @@ public partial class AppData : AppDataAbstractBase<string, string>
     /// Singleton instance of the AppData class.
     /// </summary>
     public static AppData Instance = new();
+    public static AppData ci = Instance;
 
     private AppData()
     {
