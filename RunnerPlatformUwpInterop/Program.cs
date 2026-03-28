@@ -1,12 +1,12 @@
-// EN: Variable names have been checked and replaced with self-descriptive names
-// CZ: Názvy proměnných byly zkontrolovány a nahrazeny samopopisnými názvy
-
 namespace RunnerPlatformUwpInterop;
 
 using Microsoft.Extensions.DependencyInjection;
 using SunamoPlatformUwpInterop.AppData;
 using SunamoPlatformUwpInterop.Tests;
 
+/// <summary>
+/// Runner program for testing AppData functionality.
+/// </summary>
 internal class Program
 {
     static ServiceCollection Services = new();
@@ -24,16 +24,16 @@ internal class Program
 
     static async Task MainAsync()
     {
-        AppData.ci.CreateAppFoldersIfDontExists(new SunamoPlatformUwpInterop.Args.CreateAppFoldersIfDontExistsArgs() { AppName = appName, keysSettingsDateTime = [dtLastDt], keysSettingsBool = [boolean], keysSettingsList = [list], keysSettingsOther = [other] });
+        AppData.Instance.CreateAppFoldersIfDontExists(new SunamoPlatformUwpInterop.Args.CreateAppFoldersIfDontExistsArgs() { AppName = appName, KeysSettingsDateTime = [dtLastDt], KeysSettingsBool = [boolean], KeysSettingsList = [list], KeysSettingsOther = [other] });
 
-        await AppData.ci.SaveFileOfSettingsDateTime(dtLastDt, DateTime.MaxValue);
-        await AppData.ci.SaveFileOfSettings(other, "Other2");
-        await AppData.ci.SaveFileOfSettingsBool(boolean, true);
-        await AppData.ci.SaveFileOfSettingsList(list, ["1", "2"]);
+        await AppData.Instance.SaveFileOfSettingsDateTime(dtLastDt, DateTime.MaxValue);
+        await AppData.Instance.SaveFileOfSettings(other, "Other2");
+        await AppData.Instance.SaveFileOfSettingsBool(boolean, true);
+        await AppData.Instance.SaveFileOfSettingsList(list, ["1", "2"]);
 
-        var dt = AppData.ci.ReadFileOfSettingsDateTime(dtLastDt);
-        var builder = AppData.ci.ReadFileOfSettingsBool(boolean);
-        var o = AppData.ci.ReadFileOfSettingsOther(other);
-        var listResult = AppData.ci.ReadFileOfSettingsList(list);
+        var dt = AppData.Instance.ReadFileOfSettingsDateTime(dtLastDt);
+        var builder = AppData.Instance.ReadFileOfSettingsBool(boolean);
+        var o = AppData.Instance.ReadFileOfSettingsOther(other);
+        var listResult = AppData.Instance.ReadFileOfSettingsList(list);
     }
 }

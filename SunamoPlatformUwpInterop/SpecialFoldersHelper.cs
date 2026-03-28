@@ -1,44 +1,26 @@
 namespace SunamoPlatformUwpInterop;
 
+/// <summary>
+/// Provides helper methods for accessing special system folders.
+/// </summary>
 public class SpecialFoldersHelper
 {
-    // public static bool aspnet
-    // {
-    //     get
-    //     {
-    //         return Exc.aspnet;
-    //     }
-    //     set
-    //     {
-    //         Exc.aspnet /*= SunamoExceptions.Exc.aspnet*/ = value;
-    //     }
-    // }
-
+    /// <summary>
+    /// Gets the path to the AppData\Roaming folder.
+    /// </summary>
+    /// <returns>The path to the AppData\Roaming folder.</returns>
     public static string AppDataRoaming()
     {
-        string vr = null;
-
-        //if (Exc.aspnet || VpsHelperXlf.IsVps)
-        //{
-        // Create junction to Administrator
-        vr = @"C:\Users\Administrator\AppData\Roaming";
-        //}
-        //else
-        //{
-        //    var n = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-        //    // Vracelo mi to empty string  s Environment.GetFolderPath
-        //    //vr = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-        //    vr = @"C:\Users\"+ Path.GetFileName(n) + @"\AppData\Roaming";
-        //}
-
-        return vr;
+        string result = @"C:\Users\Administrator\AppData\Roaming";
+        return result;
     }
 
     /// <summary>
-    ///     Return root folder of AppData (as C:\Users\n\AppData\)
+    /// Gets the root folder of AppData (e.g. C:\Users\username\AppData\).
     /// </summary>
+    /// <returns>The path to the AppData root folder.</returns>
     public static string ApplicationData()
     {
-        return Path.GetDirectoryName(AppDataRoaming());
+        return Path.GetDirectoryName(AppDataRoaming())!;
     }
 }

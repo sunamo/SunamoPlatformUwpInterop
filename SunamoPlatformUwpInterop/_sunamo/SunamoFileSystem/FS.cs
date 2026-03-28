@@ -1,86 +1,50 @@
 namespace SunamoPlatformUwpInterop._sunamo.SunamoFileSystem;
 
+/// <summary>
+/// Provides file system helper methods for creating directories.
+/// </summary>
 internal class FS
 {
-    internal static void CreateUpfoldersPsysicallyUnlessThere(string nad)
+    /// <summary>
+    /// Creates the parent folder of the specified path if it does not exist.
+    /// </summary>
+    /// <param name="path">The full path whose parent directory should be created.</param>
+    internal static void CreateUpfoldersPsysicallyUnlessThere(string path)
     {
-        CreateFoldersPsysicallyUnlessThere(Path.GetDirectoryName(nad));
+        var parentDirectory = Path.GetDirectoryName(path);
+        if (parentDirectory != null)
+            CreateFoldersPsysicallyUnlessThere(parentDirectory);
     }
 
-    internal static void CreateFoldersPsysicallyUnlessThere(string nad)
+    /// <summary>
+    /// Creates the specified directory and all parent directories if they do not exist.
+    /// </summary>
+    /// <param name="path">The full path of the directory to create.</param>
+    internal static void CreateFoldersPsysicallyUnlessThere(string path)
     {
-        ThrowEx.IsNullOrEmpty("nad", nad);
-        //ThrowEx.IsNotWindowsPathFormat("nad", nad);
+        ThrowEx.IsNullOrEmpty("path", path);
 
+        if (Directory.Exists(path)) return;
 
-        if (Directory.Exists(nad)) return;
-
-        var slozkyKVytvoreni = new List<string>
+        var foldersToCreate = new List<string>
         {
-            nad
+            path
         };
 
-        while (true)
+        var currentPath = Path.GetDirectoryName(path);
+        while (currentPath != null)
         {
-            nad = Path.GetDirectoryName(nad);
+            // TODO: This does not work for UWP/UAP apps because they do not have access to the full disk. Investigate how to get/verify any folder on the disk in UWP/UAP.
+            if (Directory.Exists(currentPath)) break;
 
-            // TODO: Tady to nefunguje pro UWP/UAP apps protoze nemaji pristup k celemu disku. Zjistit co to je UWP/UAP/... a jak v nem ziskat/overit jakoukoliv slozku na disku
-            if (Directory.Exists(nad)) break;
-
-            var kopia = nad;
-            slozkyKVytvoreni.Add(kopia);
+            foldersToCreate.Add(currentPath);
+            currentPath = Path.GetDirectoryName(currentPath);
         }
 
-        slozkyKVytvoreni.Reverse();
-        foreach (var item in slozkyKVytvoreni)
+        foldersToCreate.Reverse();
+        foreach (var item in foldersToCreate)
         {
-            var folder = item;
-            if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
+            if (!Directory.Exists(item)) Directory.CreateDirectory(item);
         }
     }
-
-
-    //    internal static Func<string, bool> IsWindowsPathFormat;
-    //    internal static Func<string, string> GetDirectoryName;
-    //    internal static Action<string> CreateDirectory;
-    //    internal static Func<string, bool> ExistsDirectory;
-    //    internal static Action<string> CreateUpfoldersPsysicallyUnlessThere;
-    //    internal static Action<string> CreateFoldersPsysicallyUnlessThere;
-
-    //    internal static string WithEndSlash(string v)
-    //    {
-    //        return WithEndSlash(ref v);
-    //    }
-
-    //    /// <summary>
-    //    ///     Usage: Exceptions.FileWasntFoundInDirectory
-    //    /// </summary>
-    //    /// <param name="v"></param>
-    //    /// <returns></returns>
-    //    internal static string WithEndSlash(ref string v)
-    //    {
-    //        if (v != string.Empty)
-    //        {
-    //            v = v.TrimEnd('\\') + '\\';
-    //        }
-
-    //        FirstCharUpper(ref v);
-    //        return v;
-    //    }
-
-    //    internal static void FirstCharUpper(ref string nazevPP)
-    //    {
-    //        nazevPP = FirstCharUpper(nazevPP);
-    //    }
-
-    //    internal static string FirstCharUpper(string nazevPP)
-    //    {
-    //        if (nazevPP.Length == 1)
-    //        {
-    //            return nazevPP.ToUpper();
-    //        }
-
-    //        string sb = nazevPP.Substring(1);
-    //        return nazevPP[0].ToString().ToUpper() + sb;
-    //    }
 }

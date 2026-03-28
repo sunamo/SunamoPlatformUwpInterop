@@ -1,6 +1,8 @@
 namespace SunamoPlatformUwpInterop._sunamo.SunamoExceptions;
 
-// © www.sunamo.cz. All Rights Reserved.
+/// <summary>
+/// Provides exception message generation methods.
+/// </summary>
 internal sealed partial class Exceptions
 {
     #region Other
@@ -10,46 +12,48 @@ internal sealed partial class Exceptions
     }
 
     internal static Tuple<string, string, string> PlaceOfException(
-bool fillAlsoFirstTwo = true)
+        bool isFillAlsoFirstTwo = true)
     {
-        StackTrace st = new();
-        var value = st.ToString();
-        var lines = value.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
-        lines.RemoveAt(0);
+        StackTrace stackTrace = new();
+        var stackTraceText = stackTrace.ToString();
+        var stackFrames = stackTraceText.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
+        stackFrames.RemoveAt(0);
         var i = 0;
-        string type = string.Empty;
+        string typeName = string.Empty;
         string methodName = string.Empty;
-        for (; i < lines.Count; i++)
+        for (; i < stackFrames.Count; i++)
         {
-            var item = lines[i];
-            if (fillAlsoFirstTwo)
+            var item = stackFrames[i];
+            if (isFillAlsoFirstTwo)
                 if (!item.StartsWith("   at ThrowEx"))
                 {
-                    TypeAndMethodName(item, out type, out methodName);
-                    fillAlsoFirstTwo = false;
+                    TypeAndMethodName(item, out typeName, out methodName);
+                    isFillAlsoFirstTwo = false;
                 }
             if (item.StartsWith("at System."))
             {
-                lines.Add(string.Empty);
-                lines.Add(string.Empty);
+                stackFrames.Add(string.Empty);
+                stackFrames.Add(string.Empty);
                 break;
             }
         }
-        return new Tuple<string, string, string>(type, methodName, string.Join(Environment.NewLine, lines));
+        return new Tuple<string, string, string>(typeName, methodName, string.Join(Environment.NewLine, stackFrames));
     }
-    internal static void TypeAndMethodName(string lines, out string type, out string methodName)
+
+    internal static void TypeAndMethodName(string stackFrame, out string typeName, out string methodName)
     {
-        var s2 = lines.Split("at ")[1].Trim();
-        var text = s2.Split("(")[0];
-        var parameter = text.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries).ToList();
-        methodName = parameter[^1];
-        parameter.RemoveAt(parameter.Count - 1);
-        type = string.Join(".", parameter);
+        var afterAt = stackFrame.Split("at ")[1].Trim();
+        var text = afterAt.Split("(")[0];
+        var parts = text.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+        methodName = parts[^1];
+        parts.RemoveAt(parts.Count - 1);
+        typeName = string.Join(".", parts);
     }
-    internal static string CallingMethod(int value = 1)
+
+    internal static string CallingMethod(int depth = 1)
     {
         StackTrace stackTrace = new();
-        var methodBase = stackTrace.GetFrame(value)?.GetMethod();
+        var methodBase = stackTrace.GetFrame(depth)?.GetMethod();
         if (methodBase == null)
         {
             return "Method name cannot be get";
@@ -60,43 +64,45 @@ bool fillAlsoFirstTwo = true)
     #endregion
 
     #region IsNullOrWhitespace
-    internal static string? IsNullOrWhitespace(string before, string argName, string argValue, bool notAllowOnlyWhitespace)
+    internal static string? IsNullOrWhitespace(string before, string argName, string argValue, bool isNotAllowingOnlyWhitespace)
     {
-        string addParams;
+        string additionalParams;
         if (argValue == null)
         {
-            addParams = AddParams();
-            return CheckBefore(before) + argName + " is null" + addParams;
+            additionalParams = AddParams();
+            return CheckBefore(before) + argName + " is null" + additionalParams;
         }
         if (argValue == string.Empty)
         {
-            addParams = AddParams();
-            return CheckBefore(before) + argName + " is empty (without trim)" + addParams;
+            additionalParams = AddParams();
+            return CheckBefore(before) + argName + " is empty (without trim)" + additionalParams;
         }
-        if (notAllowOnlyWhitespace && argValue.Trim() == string.Empty)
+        if (isNotAllowingOnlyWhitespace && argValue.Trim() == string.Empty)
         {
-            addParams = AddParams();
-            return CheckBefore(before) + argName + " is empty (with trim)" + addParams;
+            additionalParams = AddParams();
+            return CheckBefore(before) + argName + " is empty (with trim)" + additionalParams;
         }
         return null;
     }
-    readonly static StringBuilder sbAdditionalInfoInner = new();
-    readonly static StringBuilder sbAdditionalInfo = new();
+
+    static readonly StringBuilder additionalInfoInnerStringBuilder = new();
+    static readonly StringBuilder additionalInfoStringBuilder = new();
+
     internal static string AddParams()
     {
-        sbAdditionalInfo.Insert(0, Environment.NewLine);
-        sbAdditionalInfo.Insert(0, "Outer:");
-        sbAdditionalInfo.Insert(0, Environment.NewLine);
-        sbAdditionalInfoInner.Insert(0, Environment.NewLine);
-        sbAdditionalInfoInner.Insert(0, "Inner:");
-        sbAdditionalInfoInner.Insert(0, Environment.NewLine);
-        var addParams = sbAdditionalInfo.ToString();
-        var addParamsInner = sbAdditionalInfoInner.ToString();
-        return addParams + addParamsInner;
+        additionalInfoStringBuilder.Insert(0, Environment.NewLine);
+        additionalInfoStringBuilder.Insert(0, "Outer:");
+        additionalInfoStringBuilder.Insert(0, Environment.NewLine);
+        additionalInfoInnerStringBuilder.Insert(0, Environment.NewLine);
+        additionalInfoInnerStringBuilder.Insert(0, "Inner:");
+        additionalInfoInnerStringBuilder.Insert(0, Environment.NewLine);
+        var additionalParams = additionalInfoStringBuilder.ToString();
+        var additionalParamsInner = additionalInfoInnerStringBuilder.ToString();
+        return additionalParams + additionalParamsInner;
     }
     #endregion
 
-    #region OnlyReturnString 
+    #region OnlyReturnString
     internal static string? NotImplementedMethod(string before)
     {
         return CheckBefore(before) + "Not implemented method.";
@@ -107,9 +113,10 @@ bool fillAlsoFirstTwo = true)
     {
         return before + " was already initialized!";
     }
-    internal static string? FirstLetterIsNotUpper(string before, string parameter)
+
+    internal static string? FirstLetterIsNotUpper(string before, string text)
     {
-        return parameter.Length == 0 ? null :
-        char.IsLower(parameter[0]) ? CheckBefore(before) + "First letter is not upper: " + parameter : null;
+        return text.Length == 0 ? null :
+        char.IsLower(text[0]) ? CheckBefore(before) + "First letter is not upper: " + text : null;
     }
 }

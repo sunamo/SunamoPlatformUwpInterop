@@ -1,33 +1,46 @@
 namespace SunamoPlatformUwpInterop.AppData;
 
 /// <summary>
+/// Partial class providing settings read methods and factory functionality for AppData.
 /// </summary>
 public partial class AppData
 {
+    /// <summary>
+    /// Reads a list of strings from the settings file for the specified key.
+    /// </summary>
+    /// <param name="key">The settings key.</param>
+    /// <returns>The list of strings from the settings file.</returns>
     public List<string> ReadFileOfSettingsList(string key)
     {
-        return ReadFileOfSettingsWorker(loadedSettingsList, key);
+        return ReadFileOfSettingsWorker(LoadedSettingsList!, key);
     }
 
     /// <summary>
-    ///     CryptHelper.ApplyCryptData(CryptHelper.RijndaelBytes.Instance, CryptDataWrapper.rijn);
-    ///     Každá aplikace musí specifikovat jaké klíče používá
-    ///     Ty se potom načtou při startu aplikace
-    ///     Dodržuji tu zásadu že nic souvisejícího s nastavením se nenačítá po inicializaci
+    /// Gets a common settings value for the specified key.
+    /// Each application must specify which keys it uses.
+    /// They are loaded at application startup and nothing related to settings
+    /// is loaded after initialization.
     /// </summary>
-    /// <param name="key"></param>
-    /// <returns></returns>
+    /// <param name="key">The settings key.</param>
+    /// <param name="isCrypted">Whether the value is encrypted.</param>
+    /// <returns>The common settings value.</returns>
     public override string GetCommonSettings(string key, bool isCrypted = true)
     {
-        if (!loadedCommonSettings.ContainsKey(key)) throw new Exception(key + " was not added into dependencies");
+        if (!LoadedCommonSettings!.ContainsKey(key)) throw new Exception(key + " was not added into dependencies");
 
-        return loadedCommonSettings[key];
+        return LoadedCommonSettings[key];
     }
 
-    public static AppData CreateForApp(string rootFolderFromCreatedAppData, string v)
+    /// <summary>
+    /// Creates an AppData instance configured for a specific application.
+    /// </summary>
+    /// <param name="rootFolderFromCreatedAppData">The root folder from an existing AppData instance.</param>
+    /// <param name="appName">The target application name.</param>
+    /// <returns>A new AppData instance configured for the specified application.</returns>
+    public static AppData CreateForApp(string rootFolderFromCreatedAppData, string appName)
     {
-        var ad = new AppData();
-        ad.RootFolder = ad.GetRootFolderForApp(rootFolderFromCreatedAppData, v);
-        return ad;
+        var appData = new AppData();
+        appData.RootFolder = appData.GetRootFolderForApp(rootFolderFromCreatedAppData, appName);
+        return appData;
     }
 }

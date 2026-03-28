@@ -1,133 +1,130 @@
 namespace SunamoPlatformUwpInterop.AppData;
 
+/// <summary>
+/// Provides application data management for desktop applications.
+/// Manages root folders, settings files, and common configuration.
+/// </summary>
 public partial class AppData : AppDataAbstractBase<string, string>
 {
-    public static AppData ci = new();
-    private static Type type = typeof(AppData);
+    /// <summary>
+    /// Singleton instance of the AppData class.
+    /// </summary>
+    public static AppData Instance = new();
 
     private AppData()
     {
     }
 
-
-
-    //private string RemoveProjectDisctinction(string basePath)
-    //{
-    //    if (string.IsNullOrEmpty(basePath))
-    //        return basePath;
-    //    var parameter = .Split(basePath, '\\');
-    //    var list = parameter[parameter.Count - 1];
-    //    //var lbs = list[list.Length - 1] == '\\';
-    //    if (list.Contains("."))
-    //    {
-    //        list = .RemoveAfterLast('.', list);
-    //        parameter[parameter.Count - 1] = list;
-    //    }
-
-    //    return FS.CombineDir(parameter.ToArray());
-    //}
-
-    ///// <summary>
-    ///// Dříve měla string basePath = null ale nevím k čemu se využíval
-    ///// </summary>
-    //public void CreateAppFoldersIfDontExists(CreateAppFoldersIfDontExistsArgs a)
-    //{
-    //    //basePath = RemoveProjectDisctinction(basePath);
-
-    //    if (!string.IsNullOrEmpty(a.AppName))
-    //    {
-    //        RootFolder = GetRootFolder(a.AppName);
-
-    //        foreach (AppFolders item in Enum.GetValues(typeof(AppFolders)))
-    //        {
-    //            FS.CreateFoldersPsysicallyUnlessThere(GetFolder(item));
-    //        }
-    //    }
-    //    else
-    //    {
-    //        ThrowEx.Custom("Nen\u00ED vypln\u011Bno n\u00E1zev aplikace.");
-    //    }
-
-    //}
-
+    /// <summary>
+    /// Gets the Sunamo folder path from the configuration file.
+    /// Falls back to AppData\Roaming\sunamo if not configured.
+    /// </summary>
+    /// <returns>The Sunamo folder path.</returns>
     public override string GetSunamoFolder()
     {
-        var result = ci.GetFolderWithAppsFiles();
-        // Here I can't use File.ReadFile
-        var sunamoFolder = File.ReadAllText(result);
+        var result = Instance.GetFolderWithAppsFiles();
+        var sunamoFolderPath = File.ReadAllText(result);
 
-        if (char.IsLower(sunamoFolder[0])) ThrowEx.FirstLetterIsNotUpper(sunamoFolder);
+        if (char.IsLower(sunamoFolderPath[0])) ThrowEx.FirstLetterIsNotUpper(sunamoFolderPath);
 
-        if (string.IsNullOrWhiteSpace(sunamoFolder))
-            sunamoFolder = Path.Combine(SpecialFoldersHelper.AppDataRoaming(), "sunamo");
-        return sunamoFolder;
-    }
-
-    public override string GetFileInSubfolder(AppFolders output, string subfolder, string file, string ext)
-    {
-        return ci.GetFile(AppFolders.Output, subfolder + @"\" + file + ext);
+        if (string.IsNullOrWhiteSpace(sunamoFolderPath))
+            sunamoFolderPath = Path.Combine(SpecialFoldersHelper.AppDataRoaming(), "sunamo");
+        return sunamoFolderPath;
     }
 
     /// <summary>
-    ///     Return always in User's AppData
+    /// Gets the file path in a subfolder within the specified application folder.
     /// </summary>
-    /// <param name="inFolderCommon"></param>
-    public override string RootFolderCommon(bool inFolderCommon)
+    /// <param name="appFolders">The application folder category.</param>
+    /// <param name="subfolder">The subfolder name.</param>
+    /// <param name="fileName">The file name without extension.</param>
+    /// <param name="extension">The file extension.</param>
+    /// <returns>The full file path.</returns>
+    public override string GetFileInSubfolder(AppFolders appFolders, string subfolder, string fileName, string extension)
     {
-        //string appDataFolder = SpecialFO
-        var sunamo2 = Path.Combine(SpecialFoldersHelper.AppDataRoaming(), "sunamo");
+        return Instance.GetFile(AppFolders.Output, subfolder + @"\" + fileName + extension);
+    }
+
+    /// <summary>
+    /// Gets the common root folder path, always located in User's AppData.
+    /// </summary>
+    /// <param name="isInFolderCommon">Whether to return the Common subfolder path.</param>
+    /// <returns>The common root folder path.</returns>
+    public override string RootFolderCommon(bool isInFolderCommon)
+    {
+        var sunamoPath = Path.Combine(SpecialFoldersHelper.AppDataRoaming(), "sunamo");
         var redirect = GetSunamoFolder();
-        if (!string.IsNullOrEmpty(redirect)) sunamo2 = redirect;
-        if (inFolderCommon) return Path.Combine(sunamo2, "Common");
-        return sunamo2;
+        if (!string.IsNullOrEmpty(redirect)) sunamoPath = redirect;
+        if (isInFolderCommon) return Path.Combine(sunamoPath, "Common");
+        return sunamoPath;
     }
 
-    public override string GetFileString(string af, string file, bool pa = false)
+    /// <summary>
+    /// Gets the file path as a string for the specified application folder name and file name.
+    /// </summary>
+    /// <param name="appFolderName">The application folder name as a string.</param>
+    /// <param name="fileName">The file name.</param>
+    /// <param name="isUsingParentAppFolder">Whether to use the parent application root folder.</param>
+    /// <returns>The file path as a string.</returns>
+    public override string GetFileString(string appFolderName, string fileName, bool isUsingParentAppFolder = false)
     {
-        string slozka2, soubor;
-        // if (Exc.aspnet)
-        // {
-        //     slozka2 = Path.Combine(basePath, af.ToString());
-        //     soubor = Path.Combine(slozka2, file);
-        //     return soubor;
-        // }
-        // else
-        // {
-        var rf = RootFolder;
-        if (pa) rf = RootFolderPa;
-        slozka2 = Path.Combine(rf, af);
-        soubor = Path.Combine(slozka2, file);
-        return soubor;
-        //}
+        var rootPath = RootFolder;
+        if (isUsingParentAppFolder) rootPath = RootFolderPa;
+        var folder = Path.Combine(rootPath, appFolderName);
+        var filePath = Path.Combine(folder, fileName);
+        return filePath;
     }
 
-    public string GetFileString(string af, string file)
+    /// <summary>
+    /// Gets the file path for the specified application folder name and file name.
+    /// </summary>
+    /// <param name="appFolderName">The application folder name as a string.</param>
+    /// <param name="fileName">The file name.</param>
+    /// <returns>The file path.</returns>
+    public string GetFileString(string appFolderName, string fileName)
     {
-        return GetFileString(af, file, false);
+        return GetFileString(appFolderName, fileName, false);
     }
 
-    public override string GetFile(AppFolders af, string file)
+    /// <summary>
+    /// Gets the file path for the specified file in the given application folder.
+    /// </summary>
+    /// <param name="appFolders">The application folder category.</param>
+    /// <param name="fileName">The file name.</param>
+    /// <returns>The file path.</returns>
+    public override string GetFile(AppFolders appFolders, string fileName)
     {
-        return GetFileString(af.ToString(), file);
+        return GetFileString(appFolders.ToString(), fileName);
     }
 
-    public string GetFileAppTypeAgnostic(AppFolders af, string file)
+    /// <summary>
+    /// Gets the file path in a folder that is application type agnostic (uses parent app folder).
+    /// </summary>
+    /// <param name="appFolders">The application folder category.</param>
+    /// <param name="fileName">The file name.</param>
+    /// <returns>The file path.</returns>
+    public string GetFileAppTypeAgnostic(AppFolders appFolders, string fileName)
     {
-        return GetFileString(af.ToString(), file, true);
+        return GetFileString(appFolders.ToString(), fileName, true);
     }
 
-    public override string GetFolder(AppFolders af)
+    /// <summary>
+    /// Gets the path for the specified application folder.
+    /// </summary>
+    /// <param name="appFolders">The application folder category.</param>
+    /// <returns>The folder path ending with a backslash.</returns>
+    public override string GetFolder(AppFolders appFolders)
     {
-        var f = RootFolder;
-        // if (Exc.aspnet)
-        // {
-        //     f = basePath;
-        // }
-        var vr = Path.Combine(f, af.ToString());
-        vr = vr.TrimEnd('\\') + "\\";
-        return vr;
+        var rootPath = RootFolder;
+        var result = Path.Combine(rootPath, appFolders.ToString());
+        result = result.TrimEnd('\\') + "\\";
+        return result;
     }
 
+    /// <summary>
+    /// Checks whether the root folder exists in the file system.
+    /// </summary>
+    /// <returns>True if the root folder exists; otherwise false.</returns>
     public override bool IsRootFolderOk()
     {
         if (string.IsNullOrEmpty(rootFolder)) return false;
@@ -135,97 +132,122 @@ public partial class AppData : AppDataAbstractBase<string, string>
     }
 
     /// <summary>
-    ///     Bylo by fajn si napsat kdy se rootFolder nastavuje volá abych příště mohl rychleji chybu opravit
-    ///     Nastvuje se v GetRootFolder jež se volá pouze v CreateAppFoldersIfDontExists
+    /// Checks whether the root folder is null or empty.
+    /// The root folder is set in GetRootFolder which is called only from CreateAppFoldersIfDontExists.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>True if the root folder is null or empty; otherwise false.</returns>
     public override bool IsRootFolderNull()
     {
-        var def = default(string);
-        if (!EqualityComparer<string>.Default.Equals(rootFolder, def))
-            // is not null
+        var defaultValue = default(string);
+        if (!EqualityComparer<string>.Default.Equals(rootFolder, defaultValue))
             return rootFolder == string.Empty;
         return true;
     }
 
+    /// <summary>
+    /// Appends the specified content to the given file path.
+    /// </summary>
+    /// <param name="content">The text content to append.</param>
+    /// <param name="filePath">The path of the file to append to.</param>
     public override
 #if ASYNC
         async Task
 #else
-void
+        void
 #endif
-        AppendAllText(string content, string sf)
+        AppendAllText(string content, string filePath)
     {
 #if ASYNC
         await
 #endif
-            File.AppendAllTextAsync(sf, content);
+            File.AppendAllTextAsync(filePath, content);
     }
 
-    public string GetRootFolderForApp(string rootFolderFromCreatedAppData, string app)
+    /// <summary>
+    /// Gets the root folder for a different application based on an existing root folder.
+    /// </summary>
+    /// <param name="rootFolderFromCreatedAppData">The existing application's root folder.</param>
+    /// <param name="appName">The name of the target application.</param>
+    /// <returns>The root folder path for the target application.</returns>
+    public string GetRootFolderForApp(string rootFolderFromCreatedAppData, string appName)
     {
-        return Path.Combine(Path.GetDirectoryName(rootFolderFromCreatedAppData), app);
+        return Path.Combine(Path.GetDirectoryName(rootFolderFromCreatedAppData)!, appName);
     }
 
-    public override string GetRootFolder(string ThisAppName)
+    /// <summary>
+    /// Gets or creates the root folder for the application with the specified name.
+    /// Also creates the parent application folder.
+    /// </summary>
+    /// <param name="appName">The application name.</param>
+    /// <returns>The root folder path.</returns>
+    public override string GetRootFolder(string appName)
     {
         rootFolder = GetSunamoFolder();
-        //pa ? SHParts.RemoveAfterFirst(ThisApp.Name, '.') :
-        RootFolder = Path.Combine(rootFolder, ThisAppName);
-        RootFolderPa = Path.Combine(Path.GetDirectoryName(rootFolder),
-            SHParts.RemoveAfterFirst(ThisAppName, "."));
+        RootFolder = Path.Combine(rootFolder, appName);
+        RootFolderPa = Path.Combine(Path.GetDirectoryName(rootFolder)!,
+            SHParts.RemoveAfterFirst(appName, "."));
         Directory.CreateDirectory(RootFolder);
         Directory.CreateDirectory(RootFolderPa);
         return RootFolder;
     }
 
     /// <summary>
-    ///     Zůstane to pojmenované SaveFile protože mám tu další metoday Save*
+    /// Saves the specified content to the given file path.
     /// </summary>
-    /// <param name="content"></param>
-    /// <param name="sf"></param>
-    /// <returns></returns>
+    /// <param name="content">The text content to save.</param>
+    /// <param name="filePath">The path of the file to save to.</param>
     protected override
 #if ASYNC
         async Task
 #else
-void
+        void
 #endif
-        SaveFile(string content, string sf)
+        SaveFile(string content, string filePath)
     {
 #if ASYNC
         await
 #endif
-            File.WriteAllTextAsync(sf, content);
+            File.WriteAllTextAsync(filePath, content);
     }
 
+    /// <summary>
+    /// Appends text content to a file in the specified application folder.
+    /// </summary>
+    /// <param name="appFolders">The application folder category.</param>
+    /// <param name="fileName">The file name.</param>
+    /// <param name="value">The text to append.</param>
     public override
 #if ASYNC
         async Task
 #else
-void
+        void
 #endif
-        AppendAllText(AppFolders af, string file, string value)
+        AppendAllText(AppFolders appFolders, string fileName, string value)
     {
         ThrowEx.NotImplementedMethod();
     }
 
     /// <summary>
-    ///     Dont use - instead of this GetCommonSettings
-    ///     Without ext because all is crypted and in bytes
-    ///     Folder is possible to obtain A1 = null
+    /// Gets the file path for common settings.
+    /// Without extension because all values are encrypted and stored in bytes.
     /// </summary>
-    /// <param name="filename"></param>
-    public override string GetFileCommonSettings(string filename)
+    /// <param name="fileName">The settings file name.</param>
+    /// <returns>The file path for the common settings file.</returns>
+    public override string GetFileCommonSettings(string fileName)
     {
-        var fc = RootFolderCommon(true);
-        var vr = Path.Combine(fc, AppFolders.Settings.ToString(), filename);
-        return vr;
+        var commonFolder = RootFolderCommon(true);
+        var result = Path.Combine(commonFolder, AppFolders.Settings.ToString(), fileName);
+        return result;
     }
 
+    /// <summary>
+    /// Sets an encrypted common settings value for the specified key.
+    /// </summary>
+    /// <param name="key">The settings key.</param>
+    /// <param name="value">The value to encrypt and store.</param>
     public override void SetCommonSettings(string key, string value)
     {
-        var file = GetFileCommonSettings(key);
-        File.WriteAllBytes(file, RijndaelBytesEncrypt(Encoding.UTF8.GetBytes(value).ToList()).ToArray());
+        var filePath = GetFileCommonSettings(key);
+        File.WriteAllBytes(filePath, RijndaelBytesEncrypt!(Encoding.UTF8.GetBytes(value).ToList()).ToArray());
     }
 }

@@ -1,111 +1,111 @@
 namespace SunamoPlatformUwpInterop.AppData;
 
-// EN: Variable names have been checked and replaced with self-descriptive names
-// CZ: Názvy proměnných byly zkontrolovány a nahrazeny samopopisnými názvy
+/// <summary>
+/// Base class for application data management providing settings storage, folder management
+/// and initialization of application directories.
+/// </summary>
+/// <typeparam name="StorageFolder">The type representing a storage folder.</typeparam>
+/// <typeparam name="StorageFile">The type representing a storage file.</typeparam>
 public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<StorageFolder, StorageFile>
 {
-    public const string folderWithAppsFiles = "folderWithAppsFiles.txt";
-    private static Type type = typeof(AppDataBase<StorageFolder, StorageFile>);
-    private static bool init;
-    //private string ReadFileOfSettingsOtherWorker(string path)
-    //    {
-    //        return null;
-    //        //           if (!path.Contains("\"") && !path.Contains("/"))
-    //        //           {
-    //        //               path = AppData.ci.GetFile(AppFolders.Settings, path);
-    //        //           }
-    //        //           TF.CreateEmptyFileWhenDoesntExists(path);
-    //        //           return
-    //        //File.ReadAllTextAsync(path);
-    //    }
-    public static Func<List<byte>, List<byte>> RijndaelBytesEncrypt;
-    private string _fileFolderWithAppsFiles = "";
-    public string basePath = null;
-    private readonly string FolderWithAppsFilesOrDefault = null;
-    public Dictionary<string, string> loadedCommonSettings;
-    public Dictionary<string, bool> loadedSettingsBool;
-    public Dictionary<string, List<string>> loadedSettingsList;
-    public Dictionary<string, string> loadedSettingsOther;
-    public Dictionary<string, DateTime> loadedSettingsDateTime;
     /// <summary>
-    ///     After startup will setted up in AppData/Roaming
-    ///     Then from fileFolderWithAppsFiles App can load alternative path -
-    ///     For all apps will be valid either AppData/Roaming or alternative path
+    /// The file name used to store the path to the folder containing application files.
     /// </summary>
-    protected StorageFolder rootFolder;
-    protected StorageFolder rootFolderPa;
-    public string sunamoFolder { get; set; }
-    //public  string CommonFolder()
-    //{
-    //    var path = GetSunamoFolder().Result.ToString();
-    //    return Path.Combine(path, Translate.FromKey(XlfKeys.Common), AppFolders.Settings.ToString());
-    //}
-    //public abstract StorageFolder CommonFolder();
-    /// <summary>
-    ///     DOčasně ji zakomentuji, text apps stejně nepracuji
-    /// </summary>
-     //public dynamic Abstract
-    //{
-    //    get
-    //    {
-    //        /*
-    //         *if (!string.IsNullOrEmpty(ThisApp.Name))
-    //        {
-    //            if (this is AppDataAbstractBase<StorageFolder, StorageFile>)
-    //        {
-    //            RootFolder = ((AppDataAbstractBase<StorageFolder, StorageFile>)this).GetRootFolder();
-    //        }
-    //        else if (this is AppDataAppsAbstractBase<StorageFolder, StorageFile>)
-    //        {
-    //            RootFolder = ((AppDataAppsAbstractBase<StorageFolder, StorageFile>)this).GetRootFolder();
-    //        }
-    //         */
-    //        if (this is AppDataAbstractBase<StorageFolder, StorageFile>)
-    //        {
-    //            return (AppDataAbstractBase<StorageFolder, StorageFile>)this;
-    //        }
-    //        else if (this is AppDataAppsAbstractBase<StorageFolder, StorageFile>)
-    //        {
-    //            return (AppDataAppsAbstractBase<StorageFolder, StorageFile>)this;
-    //        }
-    //        else
-    //        {
-    //            return null;
-    //        }
-    //    }
-    //}
-    private AppDataAbstractBase<StorageFolder, StorageFile> AbstractNon => (AppDataAbstractBase<StorageFolder, StorageFile>)this;
+    public const string FolderWithAppsFiles = "folderWithAppsFiles.txt";
+
+    private static bool isInitialized;
 
     /// <summary>
-    ///     Tato cesta je již text ThisApp.Name
-    ///     Set používej text rozvahou a vždy se ujisti zda nenastavuješ na SE(null moc nevadí, v takovém případě RootFolder bude
-    ///     vracet složku v dokumentech)
+    /// Gets or sets the Rijndael encryption function for byte lists.
+    /// </summary>
+    public static Func<List<byte>, List<byte>>? RijndaelBytesEncrypt { get; set; }
+
+    private string fileFolderWithAppsFiles = "";
+
+    /// <summary>
+    /// Gets or sets the base path for the application data.
+    /// </summary>
+    public string? BasePath { get; set; }
+
+    private readonly string? folderWithAppsFilesOrDefault = null;
+
+    /// <summary>
+    /// Gets or sets the dictionary of loaded common settings.
+    /// </summary>
+    public Dictionary<string, string>? LoadedCommonSettings { get; set; }
+
+    /// <summary>
+    /// Gets or sets the dictionary of loaded boolean settings.
+    /// </summary>
+    public Dictionary<string, bool>? LoadedSettingsBool { get; set; }
+
+    /// <summary>
+    /// Gets or sets the dictionary of loaded list settings.
+    /// </summary>
+    public Dictionary<string, List<string>>? LoadedSettingsList { get; set; }
+
+    /// <summary>
+    /// Gets or sets the dictionary of loaded string settings.
+    /// </summary>
+    public Dictionary<string, string>? LoadedSettingsOther { get; set; }
+
+    /// <summary>
+    /// Gets or sets the dictionary of loaded DateTime settings.
+    /// </summary>
+    public Dictionary<string, DateTime>? LoadedSettingsDateTime { get; set; }
+
+    /// <summary>
+    /// After startup will be set up in AppData/Roaming.
+    /// Then from fileFolderWithAppsFiles the app can load an alternative path.
+    /// For all apps either AppData/Roaming or the alternative path will be valid.
+    /// </summary>
+    protected StorageFolder rootFolder = default!;
+
+    /// <summary>
+    /// The root folder for the parent application.
+    /// </summary>
+    protected StorageFolder rootFolderPa = default!;
+
+    /// <summary>
+    /// Gets or sets the Sunamo folder path.
+    /// </summary>
+    public string? SunamoFolder { get; set; }
+
+    private AppDataAbstractBase<StorageFolder, StorageFile> abstractNon => (AppDataAbstractBase<StorageFolder, StorageFile>)this;
+
+    /// <summary>
+    /// Gets or sets the root folder for the application data.
+    /// This path already includes ThisApp.Name.
+    /// Use with caution and always ensure you are not setting it to empty string.
     /// </summary>
     public StorageFolder RootFolder
     {
         get
         {
-            var isNull = AbstractNon.IsRootFolderNull();
+            var isNull = abstractNon.IsRootFolderNull();
             if (isNull)
-                throw new Exception("Slo\u017Eka ke soubor\u016Fm aplikace nebyla zad\u00E1na LookDirectIntoIsRootFolderNull.");
+                throw new Exception("Application files folder was not specified. Look directly into IsRootFolderNull.");
             return rootFolder;
         }
 
         set
         {
-            if (value != null && char.IsLower(value.ToString()[0]))
-                ThrowEx.FirstLetterIsNotUpper(value.ToString());
+            if (value != null && char.IsLower(value.ToString()![0]))
+                ThrowEx.FirstLetterIsNotUpper(value.ToString()!);
             rootFolder = value;
         }
     }
 
+    /// <summary>
+    /// Gets or sets the root folder for the parent application.
+    /// </summary>
     public StorageFolder RootFolderPa
     {
         get
         {
-            var isNull = AbstractNon.IsRootFolderNull();
+            var isNull = abstractNon.IsRootFolderNull();
             if (isNull)
-                throw new Exception("Slo\u017Eka ke soubor\u016Fm aplikace nebyla zad\u00E1na. LookDirectIntoIsRootFolderNull");
+                throw new Exception("Application files folder was not specified. Look directly into IsRootFolderNull.");
             return rootFolderPa;
         }
 
@@ -113,39 +113,77 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
     }
 
     /// <summary>
-    ///     Must return always string, not StorageFile - in Standard is not StorageFile class and its impossible to get Path
+    /// Gets the file path for common settings. Must return always string, not StorageFile.
+    /// In .NET Standard there is no StorageFile class and it is impossible to get Path.
     /// </summary>
-    /// <param name = "key"></param>
+    /// <param name="key">The settings key.</param>
+    /// <returns>The file path for the common settings file.</returns>
     public abstract string GetFileCommonSettings(string key);
-    public abstract string RootFolderCommon(bool inFolderCommon);
+
+    /// <summary>
+    /// Gets the root folder path for common application data.
+    /// </summary>
+    /// <param name="isInFolderCommon">Whether to return the Common subfolder path.</param>
+    /// <returns>The common root folder path.</returns>
+    public abstract string RootFolderCommon(bool isInFolderCommon);
+
+    /// <summary>
+    /// Gets the path for a settings file with the given key.
+    /// </summary>
+    /// <param name="key">The settings key.</param>
+    /// <returns>The full file path to the settings file.</returns>
     public string GetPathForSettingsFile(string key)
     {
-        return AppData.ci.GetFile(AppFolders.Settings, key + ".txt");
+        return AppData.Instance.GetFile(AppFolders.Settings, key + ".txt");
     }
 
-    public abstract StorageFile GetFileInSubfolder(AppFolders output, string subfolder, string file, string ext);
-    public abstract StorageFolder GetFolder(AppFolders af);
     /// <summary>
-    ///     Must be here and Tash because in UWP is everything async
+    /// Gets the file path in a subfolder within the specified application folder.
     /// </summary>
+    /// <param name="appFolders">The application folder category.</param>
+    /// <param name="subfolder">The subfolder name.</param>
+    /// <param name="fileName">The file name without extension.</param>
+    /// <param name="extension">The file extension.</param>
+    /// <returns>The full file path.</returns>
+    public abstract StorageFile GetFileInSubfolder(AppFolders appFolders, string subfolder, string fileName, string extension);
+
+    /// <summary>
+    /// Gets the path for the specified application folder.
+    /// </summary>
+    /// <param name="appFolders">The application folder category.</param>
+    /// <returns>The folder path.</returns>
+    public abstract StorageFolder GetFolder(AppFolders appFolders);
+
+    /// <summary>
+    /// Gets the Sunamo folder path. Must be here as Task because in UWP everything is async.
+    /// </summary>
+    /// <returns>The Sunamo folder path.</returns>
     public abstract StorageFolder GetSunamoFolder();
+
     private AppDataAppsAbstractBase<StorageFolder, StorageFile> AbstractNonApps()
     {
         return (AppDataAppsAbstractBase<StorageFolder, StorageFile>)this;
     }
 
+    /// <summary>
+    /// Gets the path to the file that stores the folder with application files configuration.
+    /// </summary>
+    /// <returns>The path to the folder with apps files configuration file.</returns>
     public string GetFolderWithAppsFiles()
     {
-        //Common(true)
-        var ad = SpecialFoldersHelper.AppDataRoaming();
-        var slozka = Path.Combine(ad, "sunamo\\Common", AppFolders.Settings.ToString());
-        _fileFolderWithAppsFiles = Path.Combine(slozka, folderWithAppsFiles);
-        FS.CreateUpfoldersPsysicallyUnlessThere(_fileFolderWithAppsFiles);
-        return _fileFolderWithAppsFiles;
+        var appDataRoaming = SpecialFoldersHelper.AppDataRoaming();
+        var folder = Path.Combine(appDataRoaming, "sunamo\\Common", AppFolders.Settings.ToString());
+        fileFolderWithAppsFiles = Path.Combine(folder, FolderWithAppsFiles);
+        FS.CreateUpfoldersPsysicallyUnlessThere(fileFolderWithAppsFiles);
+        return fileFolderWithAppsFiles;
     }
 
-    public string ReadFolderWithAppsFilesOrDefault( /*string text*/)
+    /// <summary>
+    /// Reads the folder with apps files path or returns the default value.
+    /// </summary>
+    /// <returns>The folder path or default value.</returns>
+    public string? ReadFolderWithAppsFilesOrDefault()
     {
-        return FolderWithAppsFilesOrDefault;
+        return folderWithAppsFilesOrDefault;
     }
 }

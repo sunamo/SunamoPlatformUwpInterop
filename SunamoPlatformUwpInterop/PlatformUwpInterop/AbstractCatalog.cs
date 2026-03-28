@@ -1,18 +1,26 @@
 namespace SunamoPlatformUwpInterop.PlatformUwpInterop;
 
 /// <summary>
-///     In non UWP is always passing as null
-///     In appData is pass ci
-///     in FSAbstract.TFAbstract is passed new instance
-///     Nikdy nevolám přímo metodu z FS, např. _folder = ac.appData.GetFolder(af); ale AppData.ci.GetFolder a ta už se
-///     rozhodce zda použije ca (není null) nebo ne
+/// Provides an abstract catalog for platform-independent storage operations.
+/// In non-UWP environments, null is always passed. In AppData, the singleton instance is used.
+/// In FSAbstract/TFAbstract, a new instance is passed.
 /// </summary>
-/// <typeparam name="StorageFolder"></typeparam>
-/// <typeparam name="StorageFile"></typeparam>
+/// <typeparam name="StorageFolder">The type representing a storage folder.</typeparam>
+/// <typeparam name="StorageFile">The type representing a storage file.</typeparam>
 public class AbstractCatalog<StorageFolder, StorageFile> : AbstractCatalogBase<StorageFolder, StorageFile>
 {
-    public AppDataBase<StorageFolder, StorageFile> appData;
-    public FSAbstract<StorageFolder, StorageFile> fs = null;
+    /// <summary>
+    /// Gets or sets the application data provider.
+    /// </summary>
+    public AppDataBase<StorageFolder, StorageFile> AppData { get; set; }
 
-    public TFAbstract<StorageFile> tf;
+    /// <summary>
+    /// Gets or sets the file system abstraction.
+    /// </summary>
+    public FSAbstract<StorageFolder, StorageFile> FileSystem { get; set; }
+
+    /// <summary>
+    /// Gets or sets the text file abstraction.
+    /// </summary>
+    public TFAbstract<StorageFile> TextFile { get; set; }
 }

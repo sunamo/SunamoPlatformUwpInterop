@@ -1,41 +1,36 @@
-// EN: Variable names have been checked and replaced with self-descriptive names
-// CZ: Názvy proměnných byly zkontrolovány a nahrazeny samopopisnými názvy
-
 namespace SunamoPlatformUwpInterop.Tests;
 
 using SunamoPlatformUwpInterop._public.SunamoEnums.Enums;
 using SunamoPlatformUwpInterop.AppData;
 using SunamoPlatformUwpInterop.Args;
 
-public class AppDataTests : TestsBase //: ProgramShared
+/// <summary>
+/// Tests for AppData functionality including folder retrieval and settings reading.
+/// </summary>
+public class AppDataTests : TestsBase
 {
-
-
+    /// <summary>
+    /// Tests that GetFolder and GetFile return valid paths for the initialized AppData instance.
+    /// </summary>
     [Fact]
-    public void Test1()
+    public void GetFolderAndFileTest()
     {
-        /*
-         * Nevím jestli je zde správné užívat ThisApp
-         * SunamoThisApp existuje a bude existovat jako SunamoPlatformUwpInterop
-         * 
-         * Oba projekty mají svůj vlastní účel:
-         * SunamoThisApp - Třída ThisApp
-         * SunamoPlatformUwpInterop - AppData a jiné metody které mají ac
-         * 
-         * 
-         */
-        //ThisApp.Name = "Test";
-        //CreatePathToFiles(AppData.AppData.ci.GetFileString);
+        var cacheFolder = AppData.Instance.GetFolder(AppFolders.Cache);
+        Assert.NotNull(cacheFolder);
+        Assert.NotEmpty(cacheFolder);
 
-
-
-        var data = AppData.ci.GetFolder(AppFolders.Cache);
-        var f = AppData.ci.GetFile(AppFolders.Crypted, "a");
+        var cryptedFile = AppData.Instance.GetFile(AppFolders.Crypted, "a");
+        Assert.NotNull(cryptedFile);
+        Assert.NotEmpty(cryptedFile);
     }
 
+    /// <summary>
+    /// Tests that ReadFileOfSettingsBool returns a value for a previously configured key.
+    /// </summary>
     [Fact]
-    public void ReadFileOfSettingsListTest()
+    public void ReadFileOfSettingsBoolTest()
     {
-        var count = AppData.ci.ReadFileOfSettingsBool("a.txt");
+        var boolValue = AppData.Instance.ReadFileOfSettingsBool("a.txt");
+        Assert.IsType<bool>(boolValue);
     }
 }

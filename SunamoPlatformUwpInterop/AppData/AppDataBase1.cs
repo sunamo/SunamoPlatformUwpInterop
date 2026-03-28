@@ -1,111 +1,79 @@
 namespace SunamoPlatformUwpInterop.AppData;
 
-// EN: Variable names have been checked and replaced with self-descriptive names
-// CZ: Názvy proměnných byly zkontrolovány a nahrazeny samopopisnými názvy
 public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<StorageFolder, StorageFile>
 {
     /// <summary>
-    ///     if is crypter, a1 start with !
-    ///     Přejmenoval jsem ji na CreateAppFoldersIfDontExists - ta uměla jen vytvořit složky
-    ///     nicméně název CreateAppFoldersIfDontExists byl v kódu využíván mnohem častěji
+    /// Creates application folders if they do not exist and loads all specified settings.
+    /// If a key is prefixed with '!', the value will be decrypted using the provided Rijndael function.
     /// </summary>
-    /// <param name = "keysCommonSettings"></param>
-    /// <param name = ""></param>
-    public async void CreateAppFoldersIfDontExists(CreateAppFoldersIfDontExistsArgs a)
+    /// <param name="args">The arguments specifying the application name, settings keys and encryption functions.</param>
+    public async void CreateAppFoldersIfDontExists(CreateAppFoldersIfDontExistsArgs args)
     {
-        RijndaelBytesEncrypt = a.RijndaelBytesEncrypt;
-        if (init)
+        RijndaelBytesEncrypt = args.RijndaelBytesEncrypt;
+        if (isInitialized)
             ThrowEx.WasAlreadyInitialized();
-        init = true;
-#region MyRegion
-        /* potřebuji proměnnou text kterou nemám
-         * nevím jak moc se to využívalo, odkomentuji až budu vědět naprogramovat funkčnost podle nějakého příkladu
-         */
-        //var GetFolderWithAppsFilesOrDefault = (text) =>
-        //{
-        //    var content = File.ReadAllTextAsync(text);
-        //    if (content == string.Empty)
-        //    {
-        //        return RootFolderCommon(false);
-        //    }
-        //    return content;
-        //};
-        //FolderWithAppsFilesOrDefault = GetFolderWithAppsFilesOrDefault();
-#endregion
-        if (string.IsNullOrEmpty(a.AppName))
-            throw new Exception("Nen\u00ED vypln\u011Bno n\u00E1zev aplikace.");
-#region Prvně musím sunamoFolder, z ní jsem potom dále schopen odvodit root folder
-        var result = AppData.ci.GetFolderWithAppsFiles();
-        // Here I can't use File.ReadAllText
-        sunamoFolder = File.ReadAllText(result);
-        if (char.IsLower(sunamoFolder[0]))
-            ThrowEx.FirstLetterIsNotUpper(sunamoFolder);
-        if (string.IsNullOrWhiteSpace(sunamoFolder))
-            sunamoFolder = Path.Combine(SpecialFoldersHelper.AppDataRoaming(), "sunamo");
-#endregion
-#region Pak teprve můžu evaluovat rootfolder pro data aplikace
+        isInitialized = true;
+
+        if (string.IsNullOrEmpty(args.AppName))
+            throw new Exception("Application name is not specified.");
+
+        var result = AppData.Instance.GetFolderWithAppsFiles();
+        SunamoFolder = File.ReadAllText(result);
+        if (char.IsLower(SunamoFolder[0]))
+            ThrowEx.FirstLetterIsNotUpper(SunamoFolder);
+        if (string.IsNullOrWhiteSpace(SunamoFolder))
+            SunamoFolder = Path.Combine(SpecialFoldersHelper.AppDataRoaming(), "sunamo");
+
         if (this is AppDataAbstractBase<StorageFolder, StorageFile>)
-            RootFolder = ((AppDataAbstractBase<StorageFolder, StorageFile>)this).GetRootFolder(a.AppName);
+            RootFolder = ((AppDataAbstractBase<StorageFolder, StorageFile>)this).GetRootFolder(args.AppName);
         else if (this is AppDataAppsAbstractBase<StorageFolder, StorageFile>)
             RootFolder = ((AppDataAppsAbstractBase<StorageFolder, StorageFile>)this).GetRootFolder();
-        /*
-        Abstract je třída jež mi vrací správně přetypované
-        problém je že je dynamic, tedy nedokáže mi říct zda musím volat await
 
-        */
-        RootFolder = AbstractNon.GetRootFolder(a.AppName);
+        RootFolder = abstractNon.GetRootFolder(args.AppName);
         foreach (AppFolders item in Enum.GetValues(typeof(AppFolders)))
         {
-            FS.CreateFoldersPsysicallyUnlessThere(GetFolder(item).ToString());
-            Directory.CreateDirectory(AbstractNon.GetFolder(item).ToString());
+            FS.CreateFoldersPsysicallyUnlessThere(GetFolder(item)!.ToString()!);
+            Directory.CreateDirectory(abstractNon.GetFolder(item)!.ToString()!);
         }
 
-#endregion
-#region A teprve na konci až když mám root folder můžu text ní sestavit cesty na základě předaných klíčů
-#region loadedCommonSettings
-        loadedCommonSettings = new Dictionary<string, string>(a.keysCommonSettings.Count);
-        foreach (var key in a.keysCommonSettings)
+        LoadedCommonSettings = new Dictionary<string, string>(args.KeysCommonSettings.Count);
+        foreach (var key in args.KeysCommonSettings)
         {
             var keyTrimmed = key.TrimStart('!');
             var file = GetFileCommonSettings(keyTrimmed);
             if (key.StartsWith("!"))
             {
-                var builder = File.ReadAllBytes(file).ToList();
-                var b2 = a.RijndaelBytesDecrypt(builder);
-                var b3 = b2.ToArray();
-                var vr = Encoding.UTF8.GetString(b3);
-                vr = vr.Replace("\0", "");
-                loadedCommonSettings.Add(keyTrimmed, vr);
+                var encryptedBytes = File.ReadAllBytes(file).ToList();
+                var decryptedBytes = args.RijndaelBytesDecrypt!(encryptedBytes);
+                var decryptedArray = decryptedBytes.ToArray();
+                var decryptedText = Encoding.UTF8.GetString(decryptedArray);
+                decryptedText = decryptedText.Replace("\0", "");
+                LoadedCommonSettings.Add(keyTrimmed, decryptedText);
             }
             else
             {
-                // Must be File
-                loadedCommonSettings.Add(keyTrimmed, File.ReadAllText(file));
+                LoadedCommonSettings.Add(keyTrimmed, File.ReadAllText(file));
             }
         }
 
-#endregion
-#region loadedSettingsList
-        loadedSettingsList = new Dictionary<string, List<string>>(a.keysSettingsList.Count);
-        foreach (var item in a.keysSettingsList)
+        LoadedSettingsList = new Dictionary<string, List<string>>(args.KeysSettingsList.Count);
+        foreach (var item in args.KeysSettingsList)
         {
             var path = GetPathForSettingsFile(item);
             if (File.Exists(path))
             {
-                loadedSettingsList.Add(item, File.ReadAllLines(path).ToList());
+                LoadedSettingsList.Add(item, File.ReadAllLines(path).ToList());
             }
             else
             {
-                KeyDontExistsOnDrive(nameof(loadedSettingsList), item);
+                KeyDontExistsOnDrive(nameof(LoadedSettingsList), item);
                 File.WriteAllText(path, "");
-                loadedSettingsList.Add(item, []);
+                LoadedSettingsList.Add(item, []);
             }
         }
 
-#endregion
-#region loadedSettingsBool
-        loadedSettingsBool = new Dictionary<string, bool>(a.keysSettingsBool.Count);
-        foreach (var item in a.keysSettingsBool)
+        LoadedSettingsBool = new Dictionary<string, bool>(args.KeysSettingsBool.Count);
+        foreach (var item in args.KeysSettingsBool)
         {
             var path = GetPathForSettingsFile(item);
             string text = "";
@@ -117,37 +85,32 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
             bool.TryParse(text, out var isBool);
             if (!isBool)
             {
-                KeyDontExistsOnDrive(nameof(loadedSettingsBool), item);
-                //ThisApp.Warning($"In ${path} was not boolean value, was written default false");
+                KeyDontExistsOnDrive(nameof(LoadedSettingsBool), item);
                 File.WriteAllText(path, bool.FalseString);
                 text = bool.FalseString;
             }
 
-            loadedSettingsBool.Add(item, bool.Parse(text));
+            LoadedSettingsBool.Add(item, bool.Parse(text));
         }
 
-#endregion
-#region loadedSettingsOther
-        loadedSettingsOther = new Dictionary<string, string>(a.keysSettingsOther.Count);
-        foreach (var item in a.keysSettingsOther)
+        LoadedSettingsOther = new Dictionary<string, string>(args.KeysSettingsOther.Count);
+        foreach (var item in args.KeysSettingsOther)
         {
             var path = GetPathForSettingsFile(item);
             if (File.Exists(path))
             {
-                loadedSettingsOther.Add(item, File.ReadAllText(path));
+                LoadedSettingsOther.Add(item, File.ReadAllText(path));
             }
             else
             {
                 File.WriteAllText(path, "");
-                KeyDontExistsOnDrive(nameof(loadedSettingsOther), item);
-                loadedSettingsOther.Add(item, "");
+                KeyDontExistsOnDrive(nameof(LoadedSettingsOther), item);
+                LoadedSettingsOther.Add(item, "");
             }
         }
 
-#endregion
-#region loadedSettingsDateTime
-        loadedSettingsDateTime = new(a.keysSettingsDateTime.Count);
-        foreach (var item in a.keysSettingsDateTime)
+        LoadedSettingsDateTime = new(args.KeysSettingsDateTime.Count);
+        foreach (var item in args.KeysSettingsDateTime)
         {
             var path = GetPathForSettingsFile(item);
             var content = "";
@@ -156,19 +119,17 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
                 content = File.ReadAllText(path);
             }
 
-            if (DateTime.TryParse(content, out var dt))
+            if (DateTime.TryParse(content, out var dateTime))
             {
-                loadedSettingsDateTime.Add(item, dt);
+                LoadedSettingsDateTime.Add(item, dateTime);
             }
             else
             {
-                File.WriteAllText(path, default);
-                KeyDontExistsOnDrive(nameof(loadedSettingsDateTime), item);
-                loadedSettingsDateTime.Add(item, default);
+                File.WriteAllText(path, "");
+                KeyDontExistsOnDrive(nameof(LoadedSettingsDateTime), item);
+                LoadedSettingsDateTime.Add(item, default(DateTime));
             }
         }
-#endregion
-#endregion
     }
 
     private void KeyDontExistsOnDrive(string variableName, string key)
@@ -178,55 +139,77 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
         Console.ResetColor();
     }
 
-    public T ReadFileOfSettingsWorker<T>(IDictionary<string, T> loadedSettingsOther, string key)
+    /// <summary>
+    /// Reads a value from the specified settings dictionary.
+    /// </summary>
+    /// <typeparam name="T">The type of the settings value.</typeparam>
+    /// <param name="settingsDictionary">The dictionary to read from.</param>
+    /// <param name="key">The settings key.</param>
+    /// <returns>The settings value.</returns>
+    public T ReadFileOfSettingsWorker<T>(IDictionary<string, T> settingsDictionary, string key)
     {
-        //ThrowEx.IsWindowsPathFormat(key, FS.IsWindowsPathFormat);
-        if (!loadedSettingsOther.ContainsKey(key))
+        if (!settingsDictionary.ContainsKey(key))
             throw new Exception($"{key} was not found in dictionary, probably was not specified as deps in calling CreateAppFoldersIfDontExists");
-        return loadedSettingsOther[key];
+        return settingsDictionary[key];
     }
 
     /// <summary>
-    ///     Save file A1 to folder AF Settings with value A2.
+    /// Saves a string value to a settings file.
     /// </summary>
-    /// <param name = "file"></param>
-    /// <param name = "value"></param>
-    public async Task SaveFileOfSettings(string file, string value)
+    /// <param name="fileName">The settings file name (without extension).</param>
+    /// <param name="value">The value to save.</param>
+    public async Task SaveFileOfSettings(string fileName, string value)
     {
-        var fileToSave = AbstractNon.GetFile(AppFolders.Settings, file + ".txt");
-        await AbstractNon.SaveFile(fileToSave, value);
-    }
-
-    public async Task SaveFileOfSettingsDateTime(string key, DateTime dt)
-    {
-        await File.WriteAllTextAsync(AppData.ci.GetFile(AppFolders.Settings, key + ".txt"), dt.ToString());
-    }
-
-    public async Task SaveFileOfSettingsBool(string key, bool builder)
-    {
-        await File.WriteAllTextAsync(AppData.ci.GetFile(AppFolders.Settings, key + ".txt"), builder.ToString());
-    }
-
-    public async Task SaveFileOfSettingsList(string key, IEnumerable<string> l)
-    {
-        await File.WriteAllLinesAsync(AppData.ci.GetFile(AppFolders.Settings, key + ".txt"), l);
+        var fileToSave = abstractNon.GetFile(AppFolders.Settings, fileName + ".txt");
+        await abstractNon.SaveFile(fileToSave, value);
     }
 
     /// <summary>
-    ///     Save file A2 to AF A1 with contents A3
+    /// Saves a DateTime value to a settings file.
     /// </summary>
-    /// <param name = "af"></param>
-    /// <param name = "file"></param>
-    /// <param name = "value"></param>
-    public async Task<StorageFile> SaveFile(AppFolders af, string file, string value)
+    /// <param name="key">The settings key.</param>
+    /// <param name="dateTime">The DateTime value to save.</param>
+    public async Task SaveFileOfSettingsDateTime(string key, DateTime dateTime)
     {
-        var fileToSave = AbstractNon.GetFile(af, file);
+        await File.WriteAllTextAsync(AppData.Instance.GetFile(AppFolders.Settings, key + ".txt"), dateTime.ToString());
+    }
+
+    /// <summary>
+    /// Saves a boolean value to a settings file.
+    /// </summary>
+    /// <param name="key">The settings key.</param>
+    /// <param name="value">The boolean value to save.</param>
+    public async Task SaveFileOfSettingsBool(string key, bool value)
+    {
+        await File.WriteAllTextAsync(AppData.Instance.GetFile(AppFolders.Settings, key + ".txt"), value.ToString());
+    }
+
+    /// <summary>
+    /// Saves a list of strings to a settings file.
+    /// </summary>
+    /// <param name="key">The settings key.</param>
+    /// <param name="enumerable">The enumerable of strings to save.</param>
+    public async Task SaveFileOfSettingsList(string key, IEnumerable<string> enumerable)
+    {
+        await File.WriteAllLinesAsync(AppData.Instance.GetFile(AppFolders.Settings, key + ".txt"), enumerable);
+    }
+
+    /// <summary>
+    /// Saves a file with the specified contents to the given application folder.
+    /// </summary>
+    /// <param name="appFolders">The application folder category.</param>
+    /// <param name="fileName">The file name.</param>
+    /// <param name="value">The content to write.</param>
+    /// <returns>The storage file that was saved to.</returns>
+    public async Task<StorageFile> SaveFile(AppFolders appFolders, string fileName, string value)
+    {
+        var fileToSave = abstractNon.GetFile(appFolders, fileName);
         await SaveFile(fileToSave, value);
         return fileToSave;
     }
 
     private async Task SaveFile(StorageFile fileToSave, string value)
     {
-        await File.WriteAllTextAsync(fileToSave.ToString(), value);
+        await File.WriteAllTextAsync(fileToSave!.ToString()!, value);
     }
 }

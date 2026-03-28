@@ -1,70 +1,76 @@
 namespace SunamoPlatformUwpInterop.AppData;
 
-// EN: Variable names have been checked and replaced with self-descriptive names
-// CZ: Názvy proměnných byly zkontrolovány a nahrazeny samopopisnými názvy
 public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<StorageFolder, StorageFile>
 {
     /// <summary>
-    ///     Append to file A2 in AF A1 with contents A3
+    /// Appends text content to a file in the specified application folder.
     /// </summary>
-    /// <param name = "af"></param>
-    /// <param name = "file"></param>
-    /// <param name = "value"></param>
-    public 
+    /// <param name="appFolders">The application folder category.</param>
+    /// <param name="fileName">The file name.</param>
+    /// <param name="value">The text to append.</param>
+    public
 #if ASYNC
         async Task
 #else
-    void 
+    void
 #endif
-    AppendAllText(AppFolders af, string file, string value)
+    AppendAllText(AppFolders appFolders, string fileName, string value)
     {
-        var fileToSave = AbstractNon.GetFile(af, file);
+        var fileToSave = abstractNon.GetFile(appFolders, fileName);
 #if ASYNC
         await
 #endif
-        AppendAllText(fileToSave.ToString(), value);
+        AppendAllText(fileToSave!.ToString()!, value);
     }
 
     /// <summary>
-    ///     Just call TF.AppendAllText
+    /// Appends text content to the specified file path.
     /// </summary>
-    /// <param name = "file"></param>
-    /// <param name = "value"></param>
-    public 
+    /// <param name="filePath">The path of the file to append to.</param>
+    /// <param name="value">The text to append.</param>
+    public
 #if ASYNC
         async Task
 #else
-    void 
+    void
 #endif
-    AppendAllText(string file, string value)
+    AppendAllText(string filePath, string value)
     {
 #if ASYNC
         await
 #endif
-        File.AppendAllTextAsync(file, value);
+        File.AppendAllTextAsync(filePath, value);
     }
 
     /// <summary>
-    ///     If file A1 dont exists, then create him with empty content and G . When optained file/folder doesnt exists, return
-    ///     SE
+    /// Reads a settings file value for an existing directory or file key.
+    /// If the file does not exist, creates it with empty content.
     /// </summary>
-    /// <param name = "key"></param>
+    /// <param name="key">The settings key.</param>
+    /// <returns>The settings value.</returns>
     public string ReadFileOfSettingsExistingDirectoryOrFile(string key)
     {
-        return ReadFileOfSettingsWorker(loadedSettingsOther, key);
+        return ReadFileOfSettingsWorker(LoadedSettingsOther!, key);
     }
 
     /// <summary>
-    ///     If file A1 dont exists or have empty content, then create him with empty content and G false
+    /// Reads a boolean settings value for the specified key.
+    /// If the file does not exist or has empty content, creates it with false value.
     /// </summary>
-    /// <param name = "path"></param>
+    /// <param name="key">The settings key.</param>
+    /// <returns>The boolean settings value.</returns>
     public bool ReadFileOfSettingsBool(string key)
     {
-        return ReadFileOfSettingsWorker(loadedSettingsBool, key);
+        return ReadFileOfSettingsWorker(LoadedSettingsBool!, key);
     }
 
+    /// <summary>
+    /// Reads a DateTime settings value for the specified key.
+    /// </summary>
+    /// <param name="key">The settings key.</param>
+    /// <returns>The DateTime settings value.</returns>
     public DateTime ReadFileOfSettingsDateTime(string key)
     {
-        return ReadFileOfSettingsWorker(loadedSettingsDateTime, key);
+        return ReadFileOfSettingsWorker(LoadedSettingsDateTime!, key);
     }
 }
