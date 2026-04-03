@@ -20,7 +20,7 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
     /// </summary>
     public static Func<List<byte>, List<byte>>? RijndaelBytesEncrypt { get; set; }
 
-    private string fileFolderWithAppsFiles = "";
+    private string folderWithAppsFilesPath = "";
 
     /// <summary>
     /// Gets or sets the base path for the application data.
@@ -56,7 +56,7 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
 
     /// <summary>
     /// After startup will be set up in AppData/Roaming.
-    /// Then from fileFolderWithAppsFiles the app can load an alternative path.
+    /// Then from folderWithAppsFilesPath the app can load an alternative path.
     /// For all apps either AppData/Roaming or the alternative path will be valid.
     /// </summary>
     protected StorageFolder rootFolder = default!;
@@ -71,7 +71,7 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
     /// </summary>
     public string? SunamoFolder { get; set; }
 
-    private AppDataAbstractBase<StorageFolder, StorageFile> abstractNon => (AppDataAbstractBase<StorageFolder, StorageFile>)this;
+    private AppDataAbstractBase<StorageFolder, StorageFile> desktopBase => (AppDataAbstractBase<StorageFolder, StorageFile>)this;
 
     /// <summary>
     /// Gets or sets the root folder for the application data.
@@ -82,7 +82,7 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
     {
         get
         {
-            var isNull = abstractNon.IsRootFolderNull();
+            var isNull = desktopBase.IsRootFolderNull();
             if (isNull)
                 throw new Exception("Application files folder was not specified. Look directly into IsRootFolderNull.");
             return rootFolder;
@@ -103,7 +103,7 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
     {
         get
         {
-            var isNull = abstractNon.IsRootFolderNull();
+            var isNull = desktopBase.IsRootFolderNull();
             if (isNull)
                 throw new Exception("Application files folder was not specified. Look directly into IsRootFolderNull.");
             return rootFolderPa;
@@ -160,11 +160,6 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
     /// <returns>The Sunamo folder path.</returns>
     public abstract StorageFolder GetSunamoFolder();
 
-    private AppDataAppsAbstractBase<StorageFolder, StorageFile> AbstractNonApps()
-    {
-        return (AppDataAppsAbstractBase<StorageFolder, StorageFile>)this;
-    }
-
     /// <summary>
     /// Gets the path to the file that stores the folder with application files configuration.
     /// </summary>
@@ -173,9 +168,9 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
     {
         var appDataRoaming = SpecialFoldersHelper.AppDataRoaming();
         var folder = Path.Combine(appDataRoaming, "sunamo\\Common", AppFolders.Settings.ToString());
-        fileFolderWithAppsFiles = Path.Combine(folder, FolderWithAppsFiles);
-        FS.CreateUpfoldersPsysicallyUnlessThere(fileFolderWithAppsFiles);
-        return fileFolderWithAppsFiles;
+        folderWithAppsFilesPath = Path.Combine(folder, FolderWithAppsFiles);
+        FS.CreateUpfoldersPsysicallyUnlessThere(folderWithAppsFilesPath);
+        return folderWithAppsFilesPath;
     }
 
     /// <summary>

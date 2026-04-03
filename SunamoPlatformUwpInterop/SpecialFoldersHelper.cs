@@ -11,8 +11,7 @@ public class SpecialFoldersHelper
     /// <returns>The path to the AppData\Roaming folder.</returns>
     public static string AppDataRoaming()
     {
-        string result = @"C:\Users\Administrator\AppData\Roaming";
-        return result;
+        return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
     }
 
     /// <summary>

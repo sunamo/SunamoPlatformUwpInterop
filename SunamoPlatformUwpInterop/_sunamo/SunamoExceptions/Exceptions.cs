@@ -6,31 +6,30 @@ namespace SunamoPlatformUwpInterop._sunamo.SunamoExceptions;
 internal sealed partial class Exceptions
 {
     #region Other
-    internal static string CheckBefore(string before)
+    internal static string CheckBefore(string prefix)
     {
-        return string.IsNullOrWhiteSpace(before) ? string.Empty : before + ": ";
+        return string.IsNullOrWhiteSpace(prefix) ? string.Empty : prefix + ": ";
     }
 
     internal static Tuple<string, string, string> PlaceOfException(
-        bool isFillAlsoFirstTwo = true)
+        bool isFillingAlsoFirstTwo = true)
     {
         StackTrace stackTrace = new();
         var stackTraceText = stackTrace.ToString();
         var stackFrames = stackTraceText.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
         stackFrames.RemoveAt(0);
-        var i = 0;
         string typeName = string.Empty;
         string methodName = string.Empty;
-        for (; i < stackFrames.Count; i++)
+        for (var i = 0; i < stackFrames.Count; i++)
         {
-            var item = stackFrames[i];
-            if (isFillAlsoFirstTwo)
-                if (!item.StartsWith("   at ThrowEx"))
+            var currentFrame = stackFrames[i];
+            if (isFillingAlsoFirstTwo)
+                if (!currentFrame.StartsWith("   at ThrowEx"))
                 {
-                    TypeAndMethodName(item, out typeName, out methodName);
-                    isFillAlsoFirstTwo = false;
+                    TypeAndMethodName(currentFrame, out typeName, out methodName);
+                    isFillingAlsoFirstTwo = false;
                 }
-            if (item.StartsWith("at System."))
+            if (currentFrame.StartsWith("at System."))
             {
                 stackFrames.Add(string.Empty);
                 stackFrames.Add(string.Empty);
@@ -43,8 +42,8 @@ internal sealed partial class Exceptions
     internal static void TypeAndMethodName(string stackFrame, out string typeName, out string methodName)
     {
         var afterAt = stackFrame.Split("at ")[1].Trim();
-        var text = afterAt.Split("(")[0];
-        var parts = text.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+        var qualifiedName = afterAt.Split("(")[0];
+        var parts = qualifiedName.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries).ToList();
         methodName = parts[^1];
         parts.RemoveAt(parts.Count - 1);
         typeName = string.Join(".", parts);
@@ -64,23 +63,23 @@ internal sealed partial class Exceptions
     #endregion
 
     #region IsNullOrWhitespace
-    internal static string? IsNullOrWhitespace(string before, string argName, string argValue, bool isNotAllowingOnlyWhitespace)
+    internal static string? IsNullOrWhitespace(string prefix, string argName, string argValue, bool isRejectingOnlyWhitespace)
     {
-        string additionalParams;
+        string additionalParameters;
         if (argValue == null)
         {
-            additionalParams = AddParams();
-            return CheckBefore(before) + argName + " is null" + additionalParams;
+            additionalParameters = AddParameters();
+            return CheckBefore(prefix) + argName + " is null" + additionalParameters;
         }
         if (argValue == string.Empty)
         {
-            additionalParams = AddParams();
-            return CheckBefore(before) + argName + " is empty (without trim)" + additionalParams;
+            additionalParameters = AddParameters();
+            return CheckBefore(prefix) + argName + " is empty (without trim)" + additionalParameters;
         }
-        if (isNotAllowingOnlyWhitespace && argValue.Trim() == string.Empty)
+        if (isRejectingOnlyWhitespace && argValue.Trim() == string.Empty)
         {
-            additionalParams = AddParams();
-            return CheckBefore(before) + argName + " is empty (with trim)" + additionalParams;
+            additionalParameters = AddParameters();
+            return CheckBefore(prefix) + argName + " is empty (with trim)" + additionalParameters;
         }
         return null;
     }
@@ -88,7 +87,7 @@ internal sealed partial class Exceptions
     static readonly StringBuilder additionalInfoInnerStringBuilder = new();
     static readonly StringBuilder additionalInfoStringBuilder = new();
 
-    internal static string AddParams()
+    internal static string AddParameters()
     {
         additionalInfoStringBuilder.Insert(0, Environment.NewLine);
         additionalInfoStringBuilder.Insert(0, "Outer:");
@@ -96,27 +95,27 @@ internal sealed partial class Exceptions
         additionalInfoInnerStringBuilder.Insert(0, Environment.NewLine);
         additionalInfoInnerStringBuilder.Insert(0, "Inner:");
         additionalInfoInnerStringBuilder.Insert(0, Environment.NewLine);
-        var additionalParams = additionalInfoStringBuilder.ToString();
-        var additionalParamsInner = additionalInfoInnerStringBuilder.ToString();
-        return additionalParams + additionalParamsInner;
+        var additionalParameters = additionalInfoStringBuilder.ToString();
+        var additionalParametersInner = additionalInfoInnerStringBuilder.ToString();
+        return additionalParameters + additionalParametersInner;
     }
     #endregion
 
     #region OnlyReturnString
-    internal static string? NotImplementedMethod(string before)
+    internal static string? NotImplementedMethod(string prefix)
     {
-        return CheckBefore(before) + "Not implemented method.";
+        return CheckBefore(prefix) + "Not implemented method.";
     }
     #endregion
 
-    internal static string WasAlreadyInitialized(string before)
+    internal static string WasAlreadyInitialized(string prefix)
     {
-        return before + " was already initialized!";
+        return prefix + " was already initialized!";
     }
 
-    internal static string? FirstLetterIsNotUpper(string before, string text)
+    internal static string? FirstLetterIsNotUpper(string prefix, string text)
     {
         return text.Length == 0 ? null :
-        char.IsLower(text[0]) ? CheckBefore(before) + "First letter is not upper: " + text : null;
+        char.IsLower(text[0]) ? CheckBefore(prefix) + "First letter is not upper: " + text : null;
     }
 }

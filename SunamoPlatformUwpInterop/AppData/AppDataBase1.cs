@@ -29,21 +29,21 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
         else if (this is AppDataAppsAbstractBase<StorageFolder, StorageFile>)
             RootFolder = ((AppDataAppsAbstractBase<StorageFolder, StorageFile>)this).GetRootFolder();
 
-        RootFolder = abstractNon.GetRootFolder(args.AppName);
+        RootFolder = desktopBase.GetRootFolder(args.AppName);
         foreach (AppFolders item in Enum.GetValues(typeof(AppFolders)))
         {
             FS.CreateFoldersPsysicallyUnlessThere(GetFolder(item)!.ToString()!);
-            Directory.CreateDirectory(abstractNon.GetFolder(item)!.ToString()!);
+            Directory.CreateDirectory(desktopBase.GetFolder(item)!.ToString()!);
         }
 
         LoadedCommonSettings = new Dictionary<string, string>(args.KeysCommonSettings.Count);
         foreach (var key in args.KeysCommonSettings)
         {
             var keyTrimmed = key.TrimStart('!');
-            var file = GetFileCommonSettings(keyTrimmed);
+            var filePath = GetFileCommonSettings(keyTrimmed);
             if (key.StartsWith("!"))
             {
-                var encryptedBytes = File.ReadAllBytes(file).ToList();
+                var encryptedBytes = File.ReadAllBytes(filePath).ToList();
                 var decryptedBytes = args.RijndaelBytesDecrypt!(encryptedBytes);
                 var decryptedArray = decryptedBytes.ToArray();
                 var decryptedText = Encoding.UTF8.GetString(decryptedArray);
@@ -52,7 +52,7 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
             }
             else
             {
-                LoadedCommonSettings.Add(keyTrimmed, File.ReadAllText(file));
+                LoadedCommonSettings.Add(keyTrimmed, File.ReadAllText(filePath));
             }
         }
 
@@ -66,7 +66,7 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
             }
             else
             {
-                KeyDontExistsOnDrive(nameof(LoadedSettingsList), item);
+                KeyDoesNotExistOnDrive(nameof(LoadedSettingsList), item);
                 File.WriteAllText(path, "");
                 LoadedSettingsList.Add(item, []);
             }
@@ -82,10 +82,10 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
                 text = File.ReadAllText(path);
             }
 
-            bool.TryParse(text, out var isBool);
-            if (!isBool)
+            bool.TryParse(text, out var parsedValue);
+            if (!parsedValue)
             {
-                KeyDontExistsOnDrive(nameof(LoadedSettingsBool), item);
+                KeyDoesNotExistOnDrive(nameof(LoadedSettingsBool), item);
                 File.WriteAllText(path, bool.FalseString);
                 text = bool.FalseString;
             }
@@ -104,7 +104,7 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
             else
             {
                 File.WriteAllText(path, "");
-                KeyDontExistsOnDrive(nameof(LoadedSettingsOther), item);
+                KeyDoesNotExistOnDrive(nameof(LoadedSettingsOther), item);
                 LoadedSettingsOther.Add(item, "");
             }
         }
@@ -126,13 +126,13 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
             else
             {
                 File.WriteAllText(path, "");
-                KeyDontExistsOnDrive(nameof(LoadedSettingsDateTime), item);
+                KeyDoesNotExistOnDrive(nameof(LoadedSettingsDateTime), item);
                 LoadedSettingsDateTime.Add(item, default(DateTime));
             }
         }
     }
 
-    private void KeyDontExistsOnDrive(string variableName, string key)
+    private void KeyDoesNotExistOnDrive(string variableName, string key)
     {
         Console.ForegroundColor = ConsoleColor.Red;
         Console.WriteLine($"{key} of {variableName} not exists on drive, was saved with default value");
@@ -160,8 +160,8 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
     /// <param name="value">The value to save.</param>
     public async Task SaveFileOfSettings(string fileName, string value)
     {
-        var fileToSave = abstractNon.GetFile(AppFolders.Settings, fileName + ".txt");
-        await abstractNon.SaveFile(fileToSave, value);
+        var fileToSave = desktopBase.GetFile(AppFolders.Settings, fileName + ".txt");
+        await desktopBase.SaveFile(fileToSave, value);
     }
 
     /// <summary>
@@ -203,7 +203,7 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
     /// <returns>The storage file that was saved to.</returns>
     public async Task<StorageFile> SaveFile(AppFolders appFolders, string fileName, string value)
     {
-        var fileToSave = abstractNon.GetFile(appFolders, fileName);
+        var fileToSave = desktopBase.GetFile(appFolders, fileName);
         await SaveFile(fileToSave, value);
         return fileToSave;
     }

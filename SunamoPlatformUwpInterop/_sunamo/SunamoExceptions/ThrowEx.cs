@@ -43,7 +43,7 @@ internal partial class ThrowEx
         return fullName;
     }
 
-    static string FullNameOfExecutedCode(object type, string methodName, bool isFromThrowEx = false)
+    static string FullNameOfExecutedCode(object typeSource, string methodName, bool isFromThrowEx = false)
     {
         if (methodName == null)
         {
@@ -56,22 +56,22 @@ internal partial class ThrowEx
             methodName = Exceptions.CallingMethod(depth);
         }
         string typeFullName;
-        if (type is Type actualType)
+        if (typeSource is Type actualType)
         {
             typeFullName = actualType.FullName ?? "Type cannot be get via type is Type type2";
         }
-        else if (type is MethodBase method)
+        else if (typeSource is MethodBase methodBase)
         {
-            typeFullName = method.ReflectedType?.FullName ?? "Type cannot be get via type is MethodBase method";
-            methodName = method.Name;
+            typeFullName = methodBase.ReflectedType?.FullName ?? "Type cannot be get via type is MethodBase method";
+            methodName = methodBase.Name;
         }
-        else if (type is string)
+        else if (typeSource is string)
         {
-            typeFullName = type.ToString() ?? "Type cannot be get via type is string";
+            typeFullName = typeSource.ToString() ?? "Type cannot be get via type is string";
         }
         else
         {
-            Type objectType = type.GetType();
+            Type objectType = typeSource.GetType();
             typeFullName = objectType.FullName ?? "Type cannot be get via type.GetType()";
         }
         return string.Concat(typeFullName, ".", methodName);

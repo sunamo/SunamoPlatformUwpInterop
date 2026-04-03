@@ -16,7 +16,7 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
 #endif
     AppendAllText(AppFolders appFolders, string fileName, string value)
     {
-        var fileToSave = abstractNon.GetFile(appFolders, fileName);
+        var fileToSave = desktopBase.GetFile(appFolders, fileName);
 #if ASYNC
         await
 #endif

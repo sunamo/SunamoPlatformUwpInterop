@@ -10,7 +10,6 @@ public partial class AppData : AppDataAbstractBase<string, string>
     /// Singleton instance of the AppData class.
     /// </summary>
     public static AppData Instance = new();
-    public static AppData ci = Instance;
 
     private AppData()
     {
@@ -23,8 +22,8 @@ public partial class AppData : AppDataAbstractBase<string, string>
     /// <returns>The Sunamo folder path.</returns>
     public override string GetSunamoFolder()
     {
-        var result = Instance.GetFolderWithAppsFiles();
-        var sunamoFolderPath = File.ReadAllText(result);
+        var configFilePath = Instance.GetFolderWithAppsFiles();
+        var sunamoFolderPath = File.ReadAllText(configFilePath);
 
         if (char.IsLower(sunamoFolderPath[0])) ThrowEx.FirstLetterIsNotUpper(sunamoFolderPath);
 
@@ -54,8 +53,8 @@ public partial class AppData : AppDataAbstractBase<string, string>
     public override string RootFolderCommon(bool isInFolderCommon)
     {
         var sunamoPath = Path.Combine(SpecialFoldersHelper.AppDataRoaming(), "sunamo");
-        var redirect = GetSunamoFolder();
-        if (!string.IsNullOrEmpty(redirect)) sunamoPath = redirect;
+        var configuredPath = GetSunamoFolder();
+        if (!string.IsNullOrEmpty(configuredPath)) sunamoPath = configuredPath;
         if (isInFolderCommon) return Path.Combine(sunamoPath, "Common");
         return sunamoPath;
     }
