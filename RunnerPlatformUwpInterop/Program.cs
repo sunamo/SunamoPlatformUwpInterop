@@ -3,9 +3,6 @@ namespace RunnerPlatformUwpInterop;
 using SunamoPlatformUwpInterop.AppData;
 using SunamoPlatformUwpInterop.Tests;
 
-/// <summary>
-/// Runner program for testing AppData functionality.
-/// </summary>
 internal class Program
 {
     const string appName = "RunnerPlatformUwpInterop";
