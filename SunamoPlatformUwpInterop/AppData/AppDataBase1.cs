@@ -25,6 +25,8 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
             RootFolder = ((AppDataAppsAbstractBase<StorageFolder, StorageFile>)this).GetRootFolder();
 
         RootFolder = desktopBase.GetRootFolder(args.AppName);
+        LocalRootFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "sunamo", args.AppName);
+        Directory.CreateDirectory(LocalRootFolder);
         foreach (AppFolders item in Enum.GetValues(typeof(AppFolders)))
         {
             FS.CreateFoldersPsysicallyUnlessThere(GetFolder(item)!.ToString()!);

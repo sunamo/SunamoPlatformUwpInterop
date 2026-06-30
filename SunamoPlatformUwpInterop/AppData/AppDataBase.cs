@@ -33,6 +33,9 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
 
     public string? SunamoFolder { get; set; }
 
+    /// Root for non-backed-up folders (Logs, Output, Cache, Temp). Points to %LOCALAPPDATA%\sunamo\AppName, never to OneDrive.
+    public string LocalRootFolder { get; set; } = "";
+
     private AppDataAbstractBase<StorageFolder, StorageFile> desktopBase => (AppDataAbstractBase<StorageFolder, StorageFile>)this;
 
     /// Gets or sets the root folder for the application data.

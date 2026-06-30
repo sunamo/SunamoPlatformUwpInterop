@@ -60,7 +60,9 @@ public partial class AppData : AppDataAbstractBase<string, string>
 
     public override string GetFolder(AppFolders appFolders)
     {
-        var rootPath = RootFolder;
+        var rootPath = AppFoldersHelper.IsNotBackuped(appFolders) && !string.IsNullOrEmpty(LocalRootFolder)
+            ? LocalRootFolder
+            : RootFolder;
         var result = Path.Combine(rootPath, appFolders.ToString());
         result = result.TrimEnd('\\') + "\\";
         return result;
