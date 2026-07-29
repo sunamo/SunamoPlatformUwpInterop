@@ -28,7 +28,6 @@
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="PlatformUwpInterop\**" />
     <EmbeddedResource Remove="PlatformUwpInterop\**" />
     <None Remove="PlatformUwpInterop\**" />
   </ItemGroup>
