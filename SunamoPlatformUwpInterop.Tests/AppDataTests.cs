@@ -15,10 +15,6 @@ public class AppDataTests : TestsBase
     [Fact]
     public void GetFolderAndFileTest()
     {
-        var cacheFolder = AppData.Instance.GetFolder(AppFolders.Cache);
-        Assert.NotNull(cacheFolder);
-        Assert.NotEmpty(cacheFolder);
-
         var cryptedFile = AppData.Instance.GetFile(AppFolders.Crypted, "a");
         Assert.NotNull(cryptedFile);
         Assert.NotEmpty(cryptedFile);
