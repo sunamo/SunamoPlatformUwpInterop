@@ -1,8 +1,5 @@
 namespace SunamoPlatformUwpInterop._sunamo.SunamoExceptions;
 
-/// <summary>
-/// Provides exception message generation methods.
-/// </summary>
 internal sealed partial class Exceptions
 {
     #region Other
@@ -16,7 +13,7 @@ internal sealed partial class Exceptions
     {
         StackTrace stackTrace = new();
         var stackTraceText = stackTrace.ToString();
-        var stackFrames = stackTraceText.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
+        var stackFrames = stackTraceText.Split([Environment.NewLine], StringSplitOptions.RemoveEmptyEntries).ToList();
         stackFrames.RemoveAt(0);
         string typeName = string.Empty;
         string methodName = string.Empty;
@@ -43,7 +40,7 @@ internal sealed partial class Exceptions
     {
         var afterAt = stackFrame.Split("at ")[1].Trim();
         var qualifiedName = afterAt.Split("(")[0];
-        var parts = qualifiedName.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+        var parts = qualifiedName.Split(['.'], StringSplitOptions.RemoveEmptyEntries).ToList();
         methodName = parts[^1];
         parts.RemoveAt(parts.Count - 1);
         typeName = string.Join(".", parts);
@@ -53,7 +50,7 @@ internal sealed partial class Exceptions
     {
         StackTrace stackTrace = new();
         var methodBase = stackTrace.GetFrame(depth)?.GetMethod();
-        if (methodBase == null)
+        if (methodBase is null)
         {
             return "Method name cannot be get";
         }

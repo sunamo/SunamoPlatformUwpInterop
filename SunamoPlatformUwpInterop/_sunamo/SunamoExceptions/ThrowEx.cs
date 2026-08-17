@@ -1,37 +1,15 @@
 namespace SunamoPlatformUwpInterop._sunamo.SunamoExceptions;
 
-/// <summary>
-/// Provides methods for throwing exceptions with detailed context information.
-/// </summary>
 internal partial class ThrowEx
 {
-    /// <summary>
-    /// Throws an exception if the first letter of the specified text is not uppercase.
-    /// </summary>
-    /// <param name="text">The text to check.</param>
-    /// <returns>True if an exception was thrown, false otherwise.</returns>
     internal static bool FirstLetterIsNotUpper(string text)
     { return ThrowIsNotNull(Exceptions.FirstLetterIsNotUpper, text); }
 
-    /// <summary>
-    /// Throws an exception if the specified argument value is null or empty.
-    /// </summary>
-    /// <param name="argName">The name of the argument.</param>
-    /// <param name="argValue">The value of the argument.</param>
-    /// <returns>True if an exception was thrown, false otherwise.</returns>
     internal static bool IsNullOrEmpty(string argName, string argValue)
     { return ThrowIsNotNull(Exceptions.IsNullOrWhitespace(FullNameOfExecutedCode(), argName, argValue, true)); }
 
-    /// <summary>
-    /// Throws a not implemented method exception.
-    /// </summary>
-    /// <returns>True if an exception was thrown, false otherwise.</returns>
     internal static bool NotImplementedMethod() { return ThrowIsNotNull(Exceptions.NotImplementedMethod); }
 
-    /// <summary>
-    /// Throws an exception indicating that the object was already initialized.
-    /// </summary>
-    /// <returns>True if an exception was thrown, false otherwise.</returns>
     internal static bool WasAlreadyInitialized()
     { return ThrowIsNotNull(Exceptions.WasAlreadyInitialized(FullNameOfExecutedCode())); }
 

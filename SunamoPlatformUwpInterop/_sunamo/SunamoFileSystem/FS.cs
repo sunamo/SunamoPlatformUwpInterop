@@ -1,14 +1,7 @@
 namespace SunamoPlatformUwpInterop._sunamo.SunamoFileSystem;
 
-/// <summary>
-/// Provides file system helper methods for creating directories.
-/// </summary>
 internal class FS
 {
-    /// <summary>
-    /// Creates the parent folder of the specified path if it does not exist.
-    /// </summary>
-    /// <param name="path">The full path whose parent directory should be created.</param>
     internal static void CreateUpfoldersPsysicallyUnlessThere(string path)
     {
         var parentDirectory = Path.GetDirectoryName(path);
@@ -16,10 +9,6 @@ internal class FS
             CreateFoldersPsysicallyUnlessThere(parentDirectory);
     }
 
-    /// <summary>
-    /// Creates the specified directory and all parent directories if they do not exist.
-    /// </summary>
-    /// <param name="path">The full path of the directory to create.</param>
     internal static void CreateFoldersPsysicallyUnlessThere(string path)
     {
         ThrowEx.IsNullOrEmpty("path", path);
