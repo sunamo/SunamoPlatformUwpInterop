@@ -7,8 +7,6 @@ public enum AppFolders
 
     Logs,
     Output,
-    Cache,
-    Temp,
 
     #endregion
 
@@ -31,5 +29,5 @@ public enum AppFolders
 public static class AppFoldersHelper
 {
     public static bool IsNotBackuped(AppFolders folder) =>
-        folder is AppFolders.Logs or AppFolders.Output or AppFolders.Cache or AppFolders.Temp;
+        folder is AppFolders.Logs or AppFolders.Output;
 }

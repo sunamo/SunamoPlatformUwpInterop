@@ -93,7 +93,7 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
     public string GetFolderWithAppsFiles()
     {
         var appDataRoaming = SpecialFoldersHelper.AppDataRoaming();
-        var folder = Path.Combine(appDataRoaming, "sunamo\\Common", AppFolders.Settings.ToString());
+        var folder = Path.Combine(appDataRoaming, "_Sunamo\\Common", AppFolders.Settings.ToString());
         folderWithAppsFilesPath = Path.Combine(folder, FolderWithAppsFiles);
         FS.CreateUpfoldersPsysicallyUnlessThere(folderWithAppsFilesPath);
         return folderWithAppsFilesPath;
