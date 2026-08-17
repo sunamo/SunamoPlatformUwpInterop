@@ -16,7 +16,7 @@ public partial class AppData : AppDataAbstractBase<string, string>
         if (char.IsLower(sunamoFolderPath[0])) ThrowEx.FirstLetterIsNotUpper(sunamoFolderPath);
 
         if (string.IsNullOrWhiteSpace(sunamoFolderPath))
-            sunamoFolderPath = Path.Combine(SpecialFoldersHelper.AppDataRoaming(), "sunamo");
+            sunamoFolderPath = Path.Combine(SpecialFoldersHelper.AppDataRoaming(), "_Sunamo");
         return sunamoFolderPath;
     }
 
@@ -27,7 +27,7 @@ public partial class AppData : AppDataAbstractBase<string, string>
 
     public override string RootFolderCommon(bool isInFolderCommon)
     {
-        var sunamoPath = Path.Combine(SpecialFoldersHelper.AppDataRoaming(), "sunamo");
+        var sunamoPath = Path.Combine(SpecialFoldersHelper.AppDataRoaming(), "_Sunamo");
         var configuredPath = GetSunamoFolder();
         if (!string.IsNullOrEmpty(configuredPath)) sunamoPath = configuredPath;
         if (isInFolderCommon) return Path.Combine(sunamoPath, "Common");

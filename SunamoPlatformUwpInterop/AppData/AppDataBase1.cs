@@ -17,7 +17,7 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
         if (char.IsLower(SunamoFolder[0]))
             ThrowEx.FirstLetterIsNotUpper(SunamoFolder);
         if (string.IsNullOrWhiteSpace(SunamoFolder))
-            SunamoFolder = Path.Combine(SpecialFoldersHelper.AppDataRoaming(), "sunamo");
+            SunamoFolder = Path.Combine(SpecialFoldersHelper.AppDataRoaming(), "_Sunamo");
 
         if (this is AppDataAbstractBase<StorageFolder, StorageFile>)
             RootFolder = ((AppDataAbstractBase<StorageFolder, StorageFile>)this).GetRootFolder(args.AppName);
@@ -25,7 +25,7 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
             RootFolder = ((AppDataAppsAbstractBase<StorageFolder, StorageFile>)this).GetRootFolder();
 
         RootFolder = desktopBase.GetRootFolder(args.AppName);
-        LocalRootFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "sunamo", args.AppName);
+        LocalRootFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "_Sunamo", args.AppName);
         Directory.CreateDirectory(LocalRootFolder);
         foreach (AppFolders item in Enum.GetValues(typeof(AppFolders)))
         {
