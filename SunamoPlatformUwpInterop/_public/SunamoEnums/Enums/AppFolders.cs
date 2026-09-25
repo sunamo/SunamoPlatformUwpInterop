@@ -7,6 +7,8 @@ public enum AppFolders
 
     Logs,
     Output,
+    Reports,
+    Backup,
 
     #endregion
 
@@ -15,13 +17,8 @@ public enum AppFolders
     Input,
     Settings,
     Data,
-    Other,
     Controls,
-    Local,
-    Roaming,
-    Crypted,
-    Reports,
-    Backup
+    Crypted
 
     #endregion
 }
@@ -29,5 +26,5 @@ public enum AppFolders
 public static class AppFoldersHelper
 {
     public static bool IsNotBackuped(AppFolders folder) =>
-        folder is AppFolders.Logs or AppFolders.Output;
+        folder is AppFolders.Logs or AppFolders.Output or AppFolders.Reports or AppFolders.Backup;
 }

@@ -2,7 +2,7 @@ namespace SunamoPlatformUwpInterop.AppData;
 
 public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<StorageFolder, StorageFile>
 {
-    public const string FolderWithAppsFiles = "folderWithAppsFiles.txt";
+    public const string FolderWithAppsFiles = "roamingSunamoRoot.txt";
 
     private static bool isInitialized;
 
@@ -33,7 +33,7 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
 
     public string? SunamoFolder { get; set; }
 
-    /// Root for non-backed-up folders (Logs, Output, Cache, Temp). Points to %LOCALAPPDATA%\sunamo\AppName, never to OneDrive.
+    /// Root for non-backed-up folders (Logs, Output, Reports, Backup). Points to %LOCALAPPDATA%\_Sunamo\AppName, never to OneDrive.
     public string LocalRootFolder { get; set; } = "";
 
     private AppDataAbstractBase<StorageFolder, StorageFile> desktopBase => (AppDataAbstractBase<StorageFolder, StorageFile>)this;
@@ -93,7 +93,7 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
     public string GetFolderWithAppsFiles()
     {
         var appDataRoaming = SpecialFoldersHelper.AppDataRoaming();
-        var folder = Path.Combine(appDataRoaming, "_Sunamo\\Common", AppFolders.Settings.ToString());
+        var folder = Path.Combine(appDataRoaming, "_Sunamo");
         folderWithAppsFilesPath = Path.Combine(folder, FolderWithAppsFiles);
         FS.CreateUpfoldersPsysicallyUnlessThere(folderWithAppsFilesPath);
         return folderWithAppsFilesPath;
