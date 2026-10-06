@@ -1,5 +1,10 @@
 # SunamoPlatformUwpInterop
 
+## Short description
+
+Základní vrstva platformy aplikací Sunamo pro propojení s UWP; druhým základem je SunamoThisApp. Obsahuje Runner a testy.
+
+
 One of the base foundations for the Sunamo app platform - the second is SunamoThisApp.
 
 ## Overview
