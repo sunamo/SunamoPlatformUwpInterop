@@ -2,6 +2,10 @@ namespace SunamoPlatformUwpInterop.AppData;
 
 public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppDataBase<StorageFolder, StorageFile>
 {
+    /// <summary>
+    /// Create app folders if dont exists.
+    /// </summary>
+    /// <param name="args">The args.</param>
     public async void CreateAppFoldersIfDontExists(CreateAppFoldersIfDontExistsArgs args)
     {
         RijndaelBytesEncrypt = args.RijndaelBytesEncrypt;
@@ -136,6 +140,13 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
         Console.ResetColor();
     }
 
+    /// <summary>
+    /// Read file of settings worker t.
+    /// </summary>
+    /// <typeparam name="T">The type T.</typeparam>
+    /// <param name="settingsDictionary">The settings dictionary.</param>
+    /// <param name="key">The key.</param>
+    /// <returns>The read file of settings worker t result.</returns>
     public T ReadFileOfSettingsWorker<T>(IDictionary<string, T> settingsDictionary, string key)
     {
         if (!settingsDictionary.ContainsKey(key))
@@ -143,27 +154,54 @@ public abstract partial class AppDataBase<StorageFolder, StorageFile> : IAppData
         return settingsDictionary[key];
     }
 
+    /// <summary>
+    /// Save file of settings.
+    /// </summary>
+    /// <param name="fileName">The file name.</param>
+    /// <param name="value">The value.</param>
     public async Task SaveFileOfSettings(string fileName, string value)
     {
         var fileToSave = desktopBase.GetFile(AppFolders.Settings, fileName + ".txt");
         await desktopBase.SaveFile(fileToSave, value);
     }
 
+    /// <summary>
+    /// Save file of settings date time.
+    /// </summary>
+    /// <param name="key">The key.</param>
+    /// <param name="dateTime">The date time.</param>
     public async Task SaveFileOfSettingsDateTime(string key, DateTime dateTime)
     {
         await File.WriteAllTextAsync(AppData.Instance.GetFile(AppFolders.Settings, key + ".txt"), dateTime.ToString());
     }
 
+    /// <summary>
+    /// Save file of settings bool.
+    /// </summary>
+    /// <param name="key">The key.</param>
+    /// <param name="value">The value.</param>
     public async Task SaveFileOfSettingsBool(string key, bool value)
     {
         await File.WriteAllTextAsync(AppData.Instance.GetFile(AppFolders.Settings, key + ".txt"), value.ToString());
     }
 
+    /// <summary>
+    /// Save file of settings list.
+    /// </summary>
+    /// <param name="key">The key.</param>
+    /// <param name="enumerable">The enumerable.</param>
     public async Task SaveFileOfSettingsList(string key, IEnumerable<string> enumerable)
     {
         await File.WriteAllLinesAsync(AppData.Instance.GetFile(AppFolders.Settings, key + ".txt"), enumerable);
     }
 
+    /// <summary>
+    /// Save file.
+    /// </summary>
+    /// <param name="appFolders">The app folders.</param>
+    /// <param name="fileName">The file name.</param>
+    /// <param name="value">The value.</param>
+    /// <returns>The save file result.</returns>
     public async Task<StorageFile> SaveFile(AppFolders appFolders, string fileName, string value)
     {
         var fileToSave = desktopBase.GetFile(appFolders, fileName);
