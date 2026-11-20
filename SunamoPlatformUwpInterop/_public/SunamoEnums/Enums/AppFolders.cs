@@ -1,4 +1,3 @@
-// variables names: ok
 namespace SunamoPlatformUwpInterop._public.SunamoEnums.Enums;
 
 public enum AppFolders
